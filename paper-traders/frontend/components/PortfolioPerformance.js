@@ -85,7 +85,7 @@ class PortfolioPerformance extends React.Component {
       portfolioData: null,
       tickerData: [],
       results: "",
-    };
+    }
   }
 
   // gets data for each stock in portfolio and stores API results in state

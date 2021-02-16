@@ -2,124 +2,113 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import axios from "axios";
+import useForm from "../lib/useForm";
+import DisplayError from "./ErrorMessage";
+import gql from "graphql-tag";
+import { useMutation } from "@apollo/client";
 
-class AddCash extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      action: "",
-      ticker: "",
-      shares: 0,
-      price: 0,
-      date: new Date(),
-      portfolio: "",
-    };
+const ADD_CASH_MUTATION = gql`
+  mutation ADD_CASH_MUTATION(
+    # which variables are passed in and types
+    $shares: Int!
+    $date: String!
+  ) {
+    createOrder(
+      data: {
+        action: "buy"
+        ticker: "$CASH"
+        price: 1
+        shares: $shares
+        date: $date
+      }
+    ) {
+      id
+    }
   }
+`;
 
-  // handler for change in inputs
-  handleChange = (event) => {
-    const value = event.target.value;
-    this.setState({
-      ...this.state,
-      [event.target.name]: value,
-    });
-  };
+export default function AddCash() {
+  const { inputs, handleChange, handleDateChange, clearForm } = useForm({
+    shares: 0,
+    date: "",
+  });
+  const [createOrder, { loading, error, data }] = useMutation(
+    ADD_CASH_MUTATION,
+    {
+      variables: inputs,
+    }
+  );
 
-  // handler for change in date input
-  handleDateChange = (date) => {
-    this.setState({
-      date: date,
-    });
-  };
-
-  // handler for submitting username
-  onSubmit = (e) => {
-    e.preventDefault();
-
-    const order = {
-      username: this.state.username,
-      action: "BUY",
-      ticker: "$CASH",
-      shares: Number(this.state.shares),
-      price: 1,
-      date: this.state.date,
-      portfolio: this.state.portfolio,
-    };
-
-    console.log(order);
-    // axios
-    //   .post("http://localhost:5000/order/add", order)
-    //   .then((res) => console.log(res.data));
-
-    this.setState({
-      username: "",
-      action: "",
-      ticker: "",
-      shares: 0,
-      price: 0,
-      date: new Date(),
-      portfolio: "",
-    });
-  };
-
-  // Currently a dummy function to test input and output
-  handleFeedback = (event) => {
-    console.log(this.state);
-  };
-
-  render() {
-    return (
-      <div>
-        <h3>Add Cash</h3>
-        <form onSubmit={this.onSubmit}>
-          <div>
-            <label>Username: </label>
+  return (
+    <div>
+      <h3>Add Cash</h3>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          console.log("inputs", inputs);
+          // submit the input fields to the backend
+          const res = await createOrder();
+          console.log("new order", res);
+          clearForm();
+        }}
+      >
+        <DisplayError error={error} />
+        <fieldset disabled={loading}>
+          {/* Input for username */}
+          <label htmlFor="username">
+            Username:
             <input
               type="text"
-              required
+              id="username"
               name="username"
-              value={this.state.username}
-              onChange={this.handleChange}
+              value={inputs.username}
+              onChange={handleChange}
             />
-          </div>
-
-          <div>
-            <label>Amount: </label>
+          </label>
+          {/* Input for shares */}
+          <label htmlFor="shares">
+            Amount:
             <input
               type="number"
-              required
+              id="shares"
               name="shares"
-              value={this.state.shares}
-              onChange={this.handleChange}
+              value={inputs.shares}
+              onChange={handleChange}
             />
-          </div>
-          <div>
-            <label>Date: </label>
-            <DatePicker
-              name="date"
-              selected={this.state.date}
-              onChange={this.handleDateChange}
-            />
-          </div>
-          <div>
-            <label>Portfolio: </label>
+          </label>
+          {/* input for portfolio */}
+          <label htmlFor="portfolio">
+            Portfolio:
             <input
               type="text"
-              required
+              id="portfolio"
               name="portfolio"
-              value={this.state.portfolio}
-              onChange={this.handleChange}
+              value={inputs.portfolio}
+              onChange={handleChange}
             />
-          </div>
+          </label>
+          {/* input field for date of Order */}
           <div>
-            <input type="submit" value="Execute Order" />
+            {" "}
+            <label htmlFor="date">
+              Date:
+              <DatePicker
+                type="date"
+                name="date"
+                selected={inputs.date}
+                onChange={handleDateChange}
+                dateFormat="MM/dd/yyyy"
+              />
+            </label>
           </div>
-        </form>
-        <button onClick={this.handleFeedback}>Feedback</button>
-      </div>
-    );
-  }
-}
 
-export default AddCash;
+          {/* button to clear the form */}
+          <button type="button" onClick={clearForm}>
+            Clear Form
+          </button>
+          <button type="submit">Add Cash</button>
+        </fieldset>
+      </form>
+    </div>
+  );
+}

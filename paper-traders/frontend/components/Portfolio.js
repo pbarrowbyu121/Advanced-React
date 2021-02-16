@@ -5,6 +5,6 @@ export default function Portfolio({ portfolio }) {
     //     <Order key={order.id}
     //     order={order}/>
     // ))}</div>
-    return <div><p>{portfolio.name}</p></div>
+    return <div><p>Individual portfolio page reached</p></div>
 }
 
