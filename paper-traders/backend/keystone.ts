@@ -8,6 +8,7 @@ import {
   withItemData,
   statelessSessions,
 } from "@keystone-next/keystone/session";
+import { sendPasswordResetemail } from "./lib/mail";
 // import console = require("console");
 
 const databaseURL =
@@ -25,6 +26,12 @@ const { withAuth } = createAuth({
   initFirstItem: {
     fields: ["name", "email", "password"],
     //TOD: Add in initial rolds here
+  },
+  passwordResetLink: {
+    async sendToken(args) {
+      // send the email
+      await sendPasswordResetemail(args.token, args.identity);
+    },
   },
 });
 

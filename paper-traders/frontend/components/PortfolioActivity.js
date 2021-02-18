@@ -1,49 +1,27 @@
 import React from "react";
 // import Order from ".Order";
 import Table from "./styles/Table";
+import Order from "./Order";
 
-export default function PortfolioActivity() {
-  return <div>
-    Portfolio Activity here!
-  </div>
-
+export default function PortfolioActivity({ portfolio }) {
+  return (
+    <div>
+      <Table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Action</th>
+            <th>Shares</th>
+            <th>Price</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {portfolio.orders.map((order) => (
+            <Order order={order} key={order.id} />
+          ))}
+        </tbody>
+      </Table>
+    </div>
+  );
 }
-
-// class PortfolioActivity extends React.Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
-//   render() {
-//     let orderList;
-//     if (this.props.activity) {
-//       orderList = this.props.activity.map((order) => (
-//         <Order data={order} key={order.createdAt} />
-//       ));
-//     } else {
-//       orderList = (
-//         <tr>
-//           <td>Waiting for Data</td>
-//         </tr>
-//       );
-//     }
-
-//     return (
-//       <>
-//         <Table>
-//           <thead>
-//             <tr>
-//               <th>Ticker</th>
-//               <th>Action</th>
-//               <th>Shares</th>
-//               <th>Price</th>
-//               <th>Date</th>
-//             </tr>
-//           </thead>
-//           <tbody>{orderList}</tbody>
-//         </Table>
-//       </>
-//     );
-//   }
-// }
-

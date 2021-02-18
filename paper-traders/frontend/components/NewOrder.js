@@ -5,7 +5,17 @@ import "react-datepicker/dist/react-datepicker.css";
 import useForm from "../lib/useForm";
 import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+
+// This is a query to get all portfolios for this user so they can be chose in portfolio field
+const USER_PORTFOLIOS_QUERY = gql`
+  query USER_PORTFOLIOS_QUERY {
+    allPortfolios(where: { user: { id: "6029f9418cf4d0aac845420d" } }) {
+      id
+      name
+    }
+  }
+`;
 
 const NEW_ORDER_MUTATION = gql`
   mutation NEW_ORDER_MUTATION(
@@ -15,6 +25,7 @@ const NEW_ORDER_MUTATION = gql`
     $shares: Int!
     $price: Int!
     $date: String!
+    $portfolioId: ID!
   ) {
     createOrder(
       data: {
@@ -23,6 +34,7 @@ const NEW_ORDER_MUTATION = gql`
         price: $price
         shares: $shares
         date: $date
+        portfolio: { connect: { id: $portfolioId } }
       }
     ) {
       id
@@ -37,6 +49,7 @@ export default function NewOrder() {
     shares: 0,
     price: 0,
     date: "",
+    portfolioId: "",
   });
   const [createOrder, { loading, error, data }] = useMutation(
     NEW_ORDER_MUTATION,
@@ -44,6 +57,14 @@ export default function NewOrder() {
       variables: inputs,
     }
   );
+
+  // query to get portfolios for this user
+  const {
+    loading: portfoliosLoading,
+    error: portfoliosError,
+    data: portfoliosData,
+  } = useQuery(USER_PORTFOLIOS_QUERY);
+  console.log("query data", portfoliosLoading, portfoliosError, portfoliosData);
 
   return (
     <div>
@@ -115,13 +136,15 @@ export default function NewOrder() {
           {/* input for portfolio */}
           <label htmlFor="portfolio">
             Portfolio:
-            <input
-              type="text"
-              id="portfolio"
-              name="portfolio"
-              value={inputs.portfolio}
+            <select
+              name="portfolioId"
+              value={inputs.portfolioId}
               onChange={handleChange}
-            />
+            >
+              {portfoliosData.allPortfolios.map((portfolio) => (
+                <option value={portfolio.id}>{portfolio.name}</option>
+              ))}
+            </select>
           </label>
           {/* input field for date of Order */}
           <div>

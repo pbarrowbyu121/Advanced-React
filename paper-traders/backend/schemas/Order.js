@@ -16,10 +16,10 @@ export const Order = list({
             }
         }),
         ticker: text({ isRequired: true, isUnique: false }),
-        price: integer(),
+        price: integer({ isRequired: true }),
         shares: integer({ isRequired: true, defaultValue: 1}),
         user: relationship({ ref: 'User.orders', many: false}),
         portfolio: relationship({ ref: 'Portfolio.orders', many: false }),
-        date: timestamp({ isRequired: true, })
+        date: timestamp({ isRequired: false, })
 }
 })

@@ -9,11 +9,11 @@ export default function useForm(initial = {}) {
     let { value, name, type } = e.target;
     // keep numbers as numbers instead of converting to string as is default html
     if (type === "number") {
-      console.log("number here");
+      //   console.log("number here");
       value = parseInt(value);
       //   console.log(value);
     }
-    console.log(e.target.name, e.target.value);
+    // console.log(e.target.name, e.target.value);
     setInputs({
       // copy the existing state
       ...inputs,

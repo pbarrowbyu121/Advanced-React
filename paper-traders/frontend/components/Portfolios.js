@@ -7,27 +7,10 @@ import { useQuery } from "@apollo/client";
 import Portfolio from "./Portfolio";
 import Link from "next/link";
 
-// const ALL_ORDERS_QUERY = gql`
-// query ALL_ORDERS_QUERY {
-//   allOrders {
-//     action
-//     ticker
-//     price
-//     shares
-//     user {
-//       name
-//     }
-//     portfolio {
-//       name
-//     }
-//     date
-//   }
-// }
-// `;
-
 const ALL_PORTFOLIOS_QUERY = gql`
   query ALL_PORTFOLIOS_QUERY {
     allPortfolios {
+      id
       name
       user {
         name
@@ -130,37 +113,6 @@ function Portfolios() {
         </div>
       ))}
     </div>
-    // <div>
-    //   <p>Portfolio</p>
-    //   <label htmlFor="user">
-    //     User:
-    //     <input
-    //       id="user"
-    //       name="user"
-    //       placeholder="username"
-    //       onChange={this.handleChange}
-    //     ></input>
-    //   </label>
-    //   <label htmlFor="portfolio">
-    //     Portfolio:
-    //     <input
-    //       id="portfolio"
-    //       name="portfolio"
-    //       placeholder="Portfolio"
-    //       onChange={this.handleChange}
-    //     ></input>
-    //   </label>
-    //   <button onClick={this.handleGetPortfolioData}>Get Activity</button>
-    //   <button onClick={this.handleFeedback}>Feedback</button>
-    //   {/* {activityComponent} */}
-    //   <PortfolioActivity activity={this.state.portfolioActivity} />
-    //   <PortfolioPerformance
-    //     activity={this.state.portfolioActivity}
-    //     tickers={this.state.tickers}
-    //     beg_date={this.state.beg_date}
-    //     end_date={this.state.end_date}
-    //   />
-    // </div>
   );
 }
 // }
