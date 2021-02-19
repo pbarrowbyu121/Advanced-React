@@ -5,7 +5,7 @@ import SignOut from "./SignOut";
 
 export default function Nav() {
   const user = useUser();
-  console.log(user);
+  // console.log(user);
   return (
     <nav>
       {/* this stuff shows if user is logged in */}

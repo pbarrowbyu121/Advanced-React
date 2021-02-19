@@ -25,7 +25,7 @@ class CreateUser extends React.Component {
       username: this.state.username,
     };
 
-    console.log(user);
+    // console.log(user);
     // axios
     //   .post("http://localhost:5000/user/add", user)
     //   .then((res) => console.log(res.data));

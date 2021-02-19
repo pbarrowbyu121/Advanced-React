@@ -1,30 +1,31 @@
 import React from "react";
 import PortfolioActivity from "./PortfolioActivity";
 // import axios from "axios";
-import PortfolioPerformance from "./PortfolioPerformance";
+import PortfolioPerformance from "./PortfolioPerformanceOrig";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import Portfolio from "./Portfolio";
 import Link from "next/link";
+import { CURRENT_USER_QUERY, useUser } from "./User";
 
-const ALL_PORTFOLIOS_QUERY = gql`
-  query ALL_PORTFOLIOS_QUERY {
-    allPortfolios {
-      id
-      name
-      user {
-        name
-      }
-      orders {
-        action
-        ticker
-        price
-        shares
-        date
-      }
-    }
-  }
-`;
+// const ALL_PORTFOLIOS_QUERY = gql`
+//   query ALL_PORTFOLIOS_QUERY {
+//     allPortfolios {
+//       id
+//       name
+//       user {
+//         name
+//       }
+//       orders {
+//         action
+//         ticker
+//         price
+//         shares
+//         date
+//       }
+//     }
+//   }
+// `;
 
 // beg_date and end_date are unix codes
 // class Portfolio extends React.Component {
@@ -96,18 +97,13 @@ const ALL_PORTFOLIOS_QUERY = gql`
 //   };
 
 function Portfolios() {
-  const { data, error, loading } = useQuery(ALL_PORTFOLIOS_QUERY);
-  console.log("here", data, error, loading);
+  const user = useUser();
+  if (!user) return null;
 
-  // put loading component here
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  // let activityComponent;
   return (
     <div>
-      {data.allPortfolios.map((portfolio) => (
-        <div>
+      {user.portfolios.map((portfolio) => (
+        <div key={portfolio.id}>
           <Link href={`/portfolio/${portfolio.id}`}>{portfolio.name}</Link>
           <p>final amount here</p>
         </div>

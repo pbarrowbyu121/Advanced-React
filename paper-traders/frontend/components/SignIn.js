@@ -37,9 +37,9 @@ export default function SignIn() {
 
   async function handleSubmit(e) {
     e.preventDefault(); // stop the form from submitting
-    console.log(inputs);
+    // console.log(inputs);
     const res = await signin();
-    console.log(res);
+    // console.log(res);
     resetForm();
     // Send the email and password to the graphqlAPI
   }
@@ -50,7 +50,7 @@ export default function SignIn() {
       ? data?.authenticateUserWithPassword
       : undefined;
 
-  console.log("error", error);
+  //   console.log("error", error);
 
   return (
     <Form method="POST" onSubmit={handleSubmit}>

@@ -6,16 +6,7 @@ import useForm from "../lib/useForm";
 import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
-
-// This is a query to get all portfolios for this user so they can be chose in portfolio field
-const USER_PORTFOLIOS_QUERY = gql`
-  query USER_PORTFOLIOS_QUERY {
-    allPortfolios(where: { user: { id: "6029f9418cf4d0aac845420d" } }) {
-      id
-      name
-    }
-  }
-`;
+import { CURRENT_USER_QUERY, useUser } from "./User";
 
 const NEW_ORDER_MUTATION = gql`
   mutation NEW_ORDER_MUTATION(
@@ -25,7 +16,9 @@ const NEW_ORDER_MUTATION = gql`
     $shares: Int!
     $price: Int!
     $date: String!
+    # $dateUTC: Int!
     $portfolioId: ID!
+    $userId: ID!
   ) {
     createOrder(
       data: {
@@ -34,7 +27,9 @@ const NEW_ORDER_MUTATION = gql`
         price: $price
         shares: $shares
         date: $date
+        # dateUTC: $dateUTC
         portfolio: { connect: { id: $portfolioId } }
+        user: { connect: { id: $userId } }
       }
     ) {
       id
@@ -42,29 +37,38 @@ const NEW_ORDER_MUTATION = gql`
   }
 `;
 
+// optimistic promise to update the cache
+function update(cache, payload) {
+  cache.evict(cache.identify(payload.data.createOrder));
+}
+
 export default function NewOrder() {
+  const user = useUser();
+  // console.log("user", user);
+  if (!user) return null;
   const { inputs, handleChange, handleDateChange, clearForm } = useForm({
-    action: "buy",
+    action: "",
     ticker: "",
     shares: 0,
     price: 0,
     date: "",
+    // dateUTC: 0,
     portfolioId: "",
+    userId: user.id,
   });
   const [createOrder, { loading, error, data }] = useMutation(
     NEW_ORDER_MUTATION,
     {
       variables: inputs,
+      update,
+
+      // refetch the currently logged in user
+      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
     }
   );
 
-  // query to get portfolios for this user
-  const {
-    loading: portfoliosLoading,
-    error: portfoliosError,
-    data: portfoliosData,
-  } = useQuery(USER_PORTFOLIOS_QUERY);
-  console.log("query data", portfoliosLoading, portfoliosError, portfoliosData);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div>
@@ -72,32 +76,23 @@ export default function NewOrder() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          console.log("inputs", inputs);
+          // console.log("inputs", inputs);
           // submit the input fields to the backend
           const res = await createOrder();
-          console.log("new order", res);
+          // console.log("new order", res);
           clearForm();
+          inputs.userId = user.id;
         }}
       >
         <DisplayError error={error} />
         <fieldset disabled={loading}>
-          {/* Input for username */}
-          <label htmlFor="username">
-            Username:
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={inputs.username}
-              onChange={handleChange}
-            />
-          </label>
           {/* Input for action type */}
           <label htmlFor="action">
             Action:
             <select name="action" value={inputs.action} onChange={handleChange}>
-              <option value="buy">BUY</option>
-              <option value="sell">SELL</option>
+              <option value="">Select one</option>
+              <option value="BUY">BUY</option>
+              <option value="SELL">SELL</option>
             </select>
           </label>
           {/* Input for ticker */}
@@ -141,14 +136,17 @@ export default function NewOrder() {
               value={inputs.portfolioId}
               onChange={handleChange}
             >
-              {portfoliosData.allPortfolios.map((portfolio) => (
-                <option value={portfolio.id}>{portfolio.name}</option>
-              ))}
+              <option value={null}>Select one</option>
+              {user &&
+                user.portfolios.map((portfolio) => (
+                  <option key={portfolio.id} value={portfolio.id}>
+                    {portfolio.name}
+                  </option>
+                ))}
             </select>
           </label>
           {/* input field for date of Order */}
           <div>
-            {" "}
             <label htmlFor="date">
               Date:
               <DatePicker
@@ -167,97 +165,15 @@ export default function NewOrder() {
           </button>
           <button type="submit">Execute Order</button>
         </fieldset>
+        <button
+          type="button"
+          onClick={() => {
+            console.log("hello", inputs);
+          }}
+        >
+          Feedback
+        </button>
       </form>
     </div>
   );
-  {
-    /* <div>
-         <h3>New Order</h3>
-         <form >
-           <div>
-             <label>Date: </label>
-             <DatePicker
-               name="date"
-               selected={this.state.date}
-               onChange={this.handleDateChange}
-             />
-           </div>
-           <div>
-             <input type="submit" value="Execute Order" />
-           </div>
-         </form>
-         <button onClick={this.handleFeedback}>Feedback</button> */
-  }
 }
-
-// class NewOrder extends React.Component {
-// constructor(props) {
-//   super(props);
-//   this.state = {
-//     username: "",
-//     action: "",
-//     ticker: "",
-//     shares: 0,
-//     price: 0,
-//     date: new Date(),
-//     portfolio: "",
-//   };
-// }
-
-// // handler for change in inputs
-// handleChange = (event) => {
-//   const value = event.target.value;
-//   this.setState({
-//     ...this.state,
-//     [event.target.name]: value,
-//   });
-// };
-
-// // handler for change in date input
-// handleDateChange = (date) => {
-//   this.setState({
-//     date: date,
-//   });
-// };
-
-// handler for submitting username
-// onSubmit = (e) => {
-//   e.preventDefault();
-
-//   const order = {
-//     username: this.state.username,
-//     action: this.state.action,
-//     ticker: this.state.ticker,
-//     shares: Number(this.state.shares),
-//     price: Number(this.state.price),
-//     date: this.state.date,
-//     portfolio: this.state.portfolio,
-//   };
-
-//   console.log(order);
-//   // axios
-//   //   .post("http://localhost:5000/order/add", order)
-//   //   .then((res) => console.log(res.data));
-
-//   this.setState({
-//     username: "",
-//     action: "",
-//     ticker: "",
-//     shares: 0,
-//     price: 0,
-//     date: new Date(),
-//     portfolio: "",
-//   });
-// };
-
-// // Currently a dummy function to test input and output
-// handleFeedback = (event) => {
-//   console.log(this.state);
-// };
-
-// render() {
-//   return (
-//
-//   );
-// }
-// }

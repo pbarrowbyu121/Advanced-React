@@ -1,8 +1,8 @@
-import Portfolios from "../components/Portfolios";
+import PortfolioList from "../components/PortfolioList";
 
 const PortfoliosPage = (props) => (
   <div>
-    <Portfolios />
+    <PortfolioList />
   </div>
 );
 

@@ -39,8 +39,8 @@ class StockSearch extends React.Component {
       "?apiKey=" +
       API_key;
 
-    console.log(this.state);
-    console.log(url);
+    // console.log(this.state);
+    // console.log(url);
 
     // fetch the api data
     fetch(url)

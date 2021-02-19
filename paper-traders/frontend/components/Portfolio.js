@@ -3,6 +3,7 @@ import Order from "./Order";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import PortfolioActivity from "./PortfolioActivity";
+import PortfolioPerformance from "./PortfolioPerformance";
 
 const SINGLE_PORTFOLIO_QUERY = gql`
   query SINGLE_PORTFOLIO_QUERY($id: ID!) {
@@ -28,16 +29,13 @@ export default function Portfolio({ id }) {
     variables: { id },
   });
 
-  console.log("id", id);
-  console.log("here", data, error, loading);
-  //   console.log("orders", data.Portfolio.orders);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <PortfolioActivity portfolio={data.Portfolio} />
+      <PortfolioPerformance portfolio={data.Portfolio} />
       <p>Individual portfolio page reached {id}</p>
     </div>
   );

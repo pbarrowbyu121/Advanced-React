@@ -32,6 +32,7 @@ export default function useForm(initial = {}) {
     setInputs({
       ...inputs,
       date: date,
+      //   dateUTC: dateUTC.ts,
     });
   }
 
@@ -45,6 +46,10 @@ export default function useForm(initial = {}) {
     const blankState = Object.fromEntries(
       Object.entries(inputs).map(([key, value]) => [key, ""])
     );
+    // don't reset the user Id
+    if (blankState.userId === "") {
+      blankState.userId = initial.userId;
+    }
     setInputs(blankState);
   }
 
