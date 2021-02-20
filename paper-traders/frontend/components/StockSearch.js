@@ -54,7 +54,7 @@ class StockSearch extends React.Component {
 
   // Currently a dummy function to test input and output
   handleFeedback = (event) => {
-    console.log(this.state);
+    // console.log(this.state);
   };
 
   render() {

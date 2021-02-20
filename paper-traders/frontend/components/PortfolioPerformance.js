@@ -9,7 +9,6 @@ import {
   calculatePerformance,
 } from "../lib/portfolioFunctions";
 import { useEffect, useState } from "react";
-import { DateTime } from "luxon";
 import PortfolioChart from "./PortfolioChart";
 
 // dummy response
@@ -647,33 +646,32 @@ export default function PortfolioPerformance({ portfolio }) {
   let beg_date = Date.parse(earliestDate(portfolio));
   console.log("earliest date", beg_date);
 
-  console.log("orders", portfolio.orders);
-
   // set last date, by default it will be today
-  let end_date = Date.parse(new Date("01/31/2021"));
+  //   let end_date = Date.parse(new Date("01/31/2021"));
+  let end_date = Date.parse(new Date());
 
-  // get ticker data from API
-  let stockAPIData = uniqueTickersArray.map((ticker) =>
-    fetchStockData(ticker, beg_date, end_date)
-  );
+  //   // get ticker data from API
+  //   let stockAPIData = uniqueTickersArray.map((ticker) =>
+  //     fetchStockData(ticker, beg_date, end_date)
+  //   );
 
   // update state if portfolio activity changes
-  useEffect(() => {
-    // returns each fetched data
-    console.log("Use Effect called");
-    Promise.all(stockAPIData)
-      .then((responses) => {
-        return responses.map((r) => r);
-      })
-      // sets response to state
-      .then((res) => setResponse(res));
-  }, [portfolio]);
-
-  //   // test update of state with dummy data
   //   useEffect(() => {
+  //     // returns each fetched data
   //     console.log("Use Effect called");
-  //     setResponse([TSLA_response, AMZN_response]);
+  //     Promise.all(stockAPIData)
+  //       .then((responses) => {
+  //         return responses.map((r) => r);
+  //       })
+  //       // sets response to state
+  //       .then((res) => setResponse(res));
   //   }, [portfolio]);
+
+  // test update of state with dummy data
+  useEffect(() => {
+    console.log("Use Effect called");
+    setResponse([TSLA_response, AMZN_response]);
+  }, [portfolio]);
 
   if (!response) return <p>No response</p>;
 
@@ -690,9 +688,7 @@ export default function PortfolioPerformance({ portfolio }) {
 
   let uniqueDates = getUniqueDates(stockData);
 
-  //   let portfolioData = [];
-
-  //   Sets up Portfolio shell by day and puts in each stock data for each day
+  // Sets up Portfolio shell by day and puts in each stock data for each day
   // INPUTS: uniqueDates, uniqueTickers, stockData, portfolio.orders
   let portfolioData = buildPortfolioData(
     uniqueDates,
@@ -707,9 +703,14 @@ export default function PortfolioPerformance({ portfolio }) {
   );
 
   console.log("portfolioPerformance", portfolioPerformance);
+  console.log("response", response);
+
+  if (response === []) {
+    return <p>Portfolio performance here</p>;
+  }
   return (
     <div>
-      <p>Portfolio performance here</p>
+      <p>Chart will go here</p>
       <PortfolioChart data={portfolioPerformance} />
     </div>
   );

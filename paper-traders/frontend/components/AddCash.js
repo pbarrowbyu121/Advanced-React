@@ -133,7 +133,7 @@ export default function AddCash() {
         <button
           type="button"
           onClick={() => {
-            console.log("hello", inputs);
+            // console.log("hello", inputs);
           }}
         >
           Feedback

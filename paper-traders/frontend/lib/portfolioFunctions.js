@@ -39,7 +39,7 @@ export function fetchStockData(ticker, beg_date, end_date) {
     API_Key;
 
   let response = fetch(url).then((res) => res.json());
-  console.log(response);
+  //   console.log(response);
   return response;
 
   //   console.log(ticker, url);
@@ -80,11 +80,6 @@ export function buildPortfolioData(
   stockData,
   portfolioOrders
 ) {
-  console.log("uniqueDatesArray", uniqueDatesArray);
-  console.log("uniqueTickersArray", uniqueTickersArray);
-  console.log("stockData", stockData);
-  console.log("portfolioOrders", portfolioOrders);
-
   let portfolioData = [];
   uniqueDatesArray.forEach((date) => {
     // creates an object for each day to be populated
