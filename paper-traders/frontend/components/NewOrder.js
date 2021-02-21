@@ -7,6 +7,8 @@ import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
 import { CURRENT_USER_QUERY, useUser } from "./User";
+import Form from "./styles/Form";
+import formatMoney from "../lib/formatMoney";
 
 const NEW_ORDER_MUTATION = gql`
   mutation NEW_ORDER_MUTATION(
@@ -72,18 +74,18 @@ export default function NewOrder() {
 
   return (
     <div>
-      <h3>New Order</h3>
-      <form
+      <Form
         onSubmit={async (e) => {
           e.preventDefault();
           // console.log("inputs", inputs);
           // submit the input fields to the backend
           const res = await createOrder();
-          // console.log("new order", res);
+          console.log("new order", res);
           clearForm();
           inputs.userId = user.id;
         }}
       >
+        <h3>New Order</h3>
         <DisplayError error={error} />
         <fieldset disabled={loading}>
           {/* Input for action type */}
@@ -165,15 +167,7 @@ export default function NewOrder() {
           </button>
           <button type="submit">Execute Order</button>
         </fieldset>
-        <button
-          type="button"
-          onClick={() => {
-            console.log("hello", inputs);
-          }}
-        >
-          Feedback
-        </button>
-      </form>
+      </Form>
     </div>
   );
 }

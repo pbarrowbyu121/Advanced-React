@@ -210,6 +210,7 @@ export default function Home() {
           box-sizing: border-box;
         }
       `}</style> */}
+      {/* <style jsx global>{``}</style> */}
     </div>
   );
 }

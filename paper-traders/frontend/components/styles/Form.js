@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 const loading = keyframes`
   from {
@@ -33,18 +33,20 @@ const Form = styled.form`
     border: 1px solid black;
     &:focus {
       outline: 0;
-      border-color: var(--red);
+      border-color: var(--green);
     }
   }
   button,
-  input[type='submit'] {
+  input[type="submit"] {
     width: auto;
-    background: red;
+    background: var(--green);
     color: white;
     border: 0;
     font-size: 2rem;
     font-weight: 600;
     padding: 0.5rem 1.2rem;
+    margin: 0.5rem;
+    cursor: pointer;
   }
   fieldset {
     border: 0;
@@ -55,16 +57,16 @@ const Form = styled.form`
     }
     &::before {
       height: 10px;
-      content: '';
+      content: "";
       display: block;
       background-image: linear-gradient(
         to right,
-        #ff3019 0%,
-        #e2b04a 50%,
-        #ff3019 100%
+        var(--green) 0%,
+        var(--offWhite) 50%,
+        var(--green) 100%
       );
     }
-    &[aria-busy='true']::before {
+    &[aria-busy="true"]::before {
       background-size: 50% auto;
       animation: ${loading} 0.5s linear infinite;
     }

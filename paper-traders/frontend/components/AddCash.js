@@ -7,6 +7,7 @@ import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
 import { CURRENT_USER_QUERY, useUser } from "./User";
+import Form from "./styles/Form";
 
 const ADD_CASH_MUTATION = gql`
   mutation ADD_CASH_MUTATION(
@@ -69,8 +70,7 @@ export default function AddCash() {
 
   return (
     <div>
-      <h3>Add Cash</h3>
-      <form
+      <Form
         onSubmit={async (e) => {
           e.preventDefault();
           // console.log("inputs", inputs);
@@ -80,6 +80,7 @@ export default function AddCash() {
           clearForm();
         }}
       >
+        <h3>Add Cash</h3>
         <DisplayError error={error} />
         <fieldset disabled={loading}>
           {/* Input for shares */}
@@ -130,15 +131,7 @@ export default function AddCash() {
           </button>
           <button type="submit">Execute Order</button>
         </fieldset>
-        <button
-          type="button"
-          onClick={() => {
-            // console.log("hello", inputs);
-          }}
-        >
-          Feedback
-        </button>
-      </form>
+      </Form>
     </div>
   );
 }

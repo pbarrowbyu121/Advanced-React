@@ -1,26 +1,28 @@
 import React from "react";
-// import Order from ".Order";
-import Table from "./styles/Table";
+import TableStyles from "./styles/TableStyles";
+import TableTitle from "./styles/TableTitle";
 import Order from "./Order";
 import { sortOrders } from "../lib/portfolioFunctions";
-// import console from "console";
+import styled from "styled-components";
 
 export default function PortfolioActivity({ portfolio }) {
   if (!portfolio || portfolio.orders.length === 0) {
-    // console.log("no orders!!");
+    console.log("portfolio", portfolio);
     return <p>Nothing to see here</p>;
   }
   // console.log("orders here", portfolio.orders.length);
   let sortedActivity = sortOrders(portfolio, "desc");
   return (
     <div>
-      <Table>
+      <TableTitle>Portfolio: {portfolio.name}</TableTitle>
+      <TableStyles>
         <thead>
           <tr>
-            <th>Ticker</th>
+            <th>Stock</th>
             <th>Action</th>
             <th>Shares</th>
             <th>Price</th>
+            <th>Total</th>
             <th>Date</th>
             <th>Delete</th>
           </tr>
@@ -30,7 +32,7 @@ export default function PortfolioActivity({ portfolio }) {
             <Order order={order} key={order.id} />
           ))}
         </tbody>
-      </Table>
+      </TableStyles>
     </div>
   );
 

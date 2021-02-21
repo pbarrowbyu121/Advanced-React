@@ -2,6 +2,7 @@ import { ApolloProvider } from "@apollo/client";
 import App, { Container } from "next/app";
 import Page from "../components/Page";
 import withData from "../lib/withData";
+import "../css/main.css";
 
 class MyApp extends App {
   render() {

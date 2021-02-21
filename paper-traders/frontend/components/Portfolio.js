@@ -36,7 +36,6 @@ export default function Portfolio({ id }) {
     <div>
       <PortfolioActivity portfolio={data.Portfolio} />
       <PortfolioPerformance portfolio={data.Portfolio} />
-      <p>Individual portfolio page reached {id}</p>
     </div>
   );
 }

@@ -710,7 +710,6 @@ export default function PortfolioPerformance({ portfolio }) {
   }
   return (
     <div>
-      <p>Chart will go here</p>
       <PortfolioChart data={portfolioPerformance} />
     </div>
   );

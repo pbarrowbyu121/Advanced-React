@@ -87,7 +87,8 @@ function drawChart(dataInput, svgRef) {
     .selectAll("text")
     .attr("dx", "-3.5em")
     .attr("dy", "-.1em")
-    .attr("transform", "rotate(-65)");
+    .attr("transform", "rotate(-65)")
+    .attr("font-family", "Permanent Marker");
 
   // add y-axis
   const yAxis = d3.axisLeft(yScale);
@@ -96,7 +97,9 @@ function drawChart(dataInput, svgRef) {
     .append("g")
     .attr("id", "y-axis")
     .attr("transform", "translate(" + padding + ", 0)")
-    .call(yAxis);
+    .call(yAxis)
+    .selectAll("text")
+    .attr("font-family", "Permanent Marker");
 }
 
 export default PortfolioChart;

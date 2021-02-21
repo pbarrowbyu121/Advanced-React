@@ -1,11 +1,14 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-const Table = styled.table`
+const TableStyles = styled.table`
   border-spacing: 0;
   width: 100%;
   border: 1px solid var(--offWhite);
+  tbody {
+    font-size: 15px;
+  }
   thead {
-    font-size: 10px;
+    font-size: 20px;
   }
   td,
   th {
@@ -17,7 +20,10 @@ const Table = styled.table`
       border-right: none;
       width: 150px;
       button {
-        width: 100%;
+        width: 50%;
+        background-color: var(--red);
+        display: block;
+        margin: auto;
       }
     }
   }
@@ -26,6 +32,9 @@ const Table = styled.table`
       background: var(--offWhite);
     }
   }
+  th {
+    border-bottom: 2px solid var(--black);
+  }
 `;
 
-export default Table;
+export default TableStyles;

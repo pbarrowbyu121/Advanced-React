@@ -2,12 +2,13 @@ import React from "react";
 import Link from "next/link";
 import { useUser } from "./User";
 import SignOut from "./SignOut";
+import NavStyles from "./styles/NavStyles";
 
 export default function Nav() {
   const user = useUser();
   // console.log(user);
   return (
-    <nav>
+    <NavStyles>
       {/* this stuff shows if user is logged in */}
       {user && (
         <>
@@ -22,6 +23,6 @@ export default function Nav() {
           <Link href="/signin">Sign In</Link>
         </>
       )}
-    </nav>
+    </NavStyles>
   );
 }
