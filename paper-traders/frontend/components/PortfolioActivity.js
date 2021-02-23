@@ -24,6 +24,7 @@ export default function PortfolioActivity({ portfolio }) {
             <th>Price</th>
             <th>Total</th>
             <th>Date</th>
+            <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>

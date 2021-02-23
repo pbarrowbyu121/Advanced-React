@@ -1,4 +1,6 @@
 import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
+import { TSLA_response, AMZN_response } from "./dummyData";
 
 // Takes portfolio object as argument, returns array of tickers
 export function uniqueTickers(Portfolio) {
@@ -22,6 +24,10 @@ export function sortOrders(Portfolio, sortOrder) {
 
 // function to get earliest date of order
 export function earliestDate(Portfolio) {
+  //   if (Portfolio.orders.length == 0) {
+  //     console.log("no orders");
+  //     return 0;
+  //   }
   return sortOrders(Portfolio, "asc")[0].date;
 }
 
@@ -177,6 +183,116 @@ export function calculatePerformance(uniqueTickersArray, portfolioShell) {
     // need to reset stock assets to 0 before next day is calculated
     stockAssets = 0;
   });
-  console.log("portfolioShell", portfolioShell);
+  //   console.log("portfolioShell", portfolioShell);
   return portfolioShell;
+}
+
+export function getPortfolioPerformance(portfolio) {
+  // trying to use hooks to store response in state
+  const [response, setResponse] = useState([]);
+
+  // if no portfolio passed return object with blank performance
+  if (!portfolio || portfolio.orders.length === 0) {
+    console.log("no portfolio or orders");
+    return {
+      id: portfolio.id,
+      name: portfolio.name,
+      orders: portfolio.orders,
+      performance: [],
+    };
+  }
+
+  // get unique tickers
+  let uniqueTickersArray = uniqueTickers(portfolio);
+
+  // get earliest and latest dates
+  let beg_date = Date.parse(earliestDate(portfolio));
+  //   let end_date = Date.parse(new Date("01/31/2021"));
+  let end_date = Date.parse(new Date());
+
+  //   // get ticker data from API
+  //   let stockAPIData = uniqueTickersArray.map((ticker) =>
+  //     fetchStockData(ticker, beg_date, end_date)
+  //   );
+
+  //   //   update state if portfolio activity changes
+  //   useEffect(() => {
+  //     // returns each fetched data
+  //     console.log("Use Effect called");
+  //     Promise.all(stockAPIData)
+  //       .then((responses) => {
+  //         return responses.map((r) => r);
+  //       })
+  //       // sets response to state
+  //       .then((res) => setResponse(res));
+  //   }, [portfolio]);
+
+  // test update of state with dummy data
+  useEffect(() => {
+    console.log("Use Effect called");
+    setResponse([TSLA_response, AMZN_response]);
+  }, [portfolio]);
+
+  // attach ticker to each daily result
+  response.map((response) => attachTicker(response));
+  let stockData = [];
+  response.forEach(
+    (response) => (stockData = [...stockData, ...response.results])
+  );
+
+  //   console.log("stockData", stockData);
+
+  let uniqueDates = getUniqueDates(stockData);
+
+  // Sets up Portfolio shell by day and puts in each stock data for each day
+  // INPUTS: uniqueDates, uniqueTickers, stockData, portfolio.orders
+  let portfolioData = buildPortfolioData(
+    uniqueDates,
+    uniqueTickersArray,
+    stockData,
+    portfolio.orders
+  );
+
+  let portfolioPerformance = calculatePerformance(
+    uniqueTickersArray,
+    portfolioData
+  );
+
+  let objSummary = {
+    id: portfolio.id,
+    name: portfolio.name,
+    orders: portfolio.orders,
+    performance: portfolioPerformance,
+  };
+
+  //   console.log("objSummary", objSummary);
+  return objSummary;
+}
+
+// get rate of return as ending value over total cash invested
+export function portfolioSummary(portfolioPerformance) {
+  if (portfolioPerformance.length === 0)
+    return {
+      startDate: 0,
+      roi: 0,
+      investment: 0,
+    };
+  console.log("portfolioPerformance", portfolioPerformance);
+  let invested = 0;
+  let finalValue =
+    portfolioPerformance[portfolioPerformance.length - 1].summary.total;
+  portfolioPerformance.forEach((day) => {
+    day.orders.forEach((order) => {
+      if (order.action === "BUY" && order.ticker === "$CASH") {
+        invested = invested + order.shares * order.price;
+      }
+    });
+  });
+  //   console.log("final amount", finalValue);
+  //   console.log("invested", invested);
+  return {
+    startDate: portfolioPerformance[0].date,
+    roi: (finalValue / invested - 1) * 100,
+    investment: invested,
+  };
 }

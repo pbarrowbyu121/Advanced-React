@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DateTime } from "luxon";
 
 export default function useForm(initial = {}) {
   // create a state object for our inputs
   const [inputs, setInputs] = useState(initial);
+  const initialValues = Object.values(initial).join("");
+  useEffect(() => {
+    setInputs(initial);
+  }, [initialValues]);
 
   function handleChange(e) {
     let { value, name, type } = e.target;
@@ -32,7 +36,6 @@ export default function useForm(initial = {}) {
     setInputs({
       ...inputs,
       date: date,
-      //   dateUTC: dateUTC.ts,
     });
   }
 

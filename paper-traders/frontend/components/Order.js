@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import DeleteOrder from "./DeleteOrder";
 import formatMoney from "../lib/formatMoney";
+import Link from "next/link";
 
 function Order({ order }) {
   return (
@@ -15,6 +16,11 @@ function Order({ order }) {
       <td>{formatMoney(order.price)}</td>
       <td>{formatMoney(order.shares * order.price)}</td>
       <td>{format(new Date(order.date), "MM-dd-yyyy")}</td>
+      <td>
+        <Link href={{ pathname: "../update", query: { id: order.id } }}>
+          Edit
+        </Link>
+      </td>
       <td>
         <DeleteOrder id={order.id} />
       </td>

@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import PortfolioActivity from "./PortfolioActivity";
 import PortfolioPerformance from "./PortfolioPerformance";
+import PortfolioStyles from "./styles/PortfolioStyles";
 
 const SINGLE_PORTFOLIO_QUERY = gql`
   query SINGLE_PORTFOLIO_QUERY($id: ID!) {
@@ -34,7 +35,9 @@ export default function Portfolio({ id }) {
 
   return (
     <div>
-      <PortfolioActivity portfolio={data.Portfolio} />
+      <PortfolioStyles>
+        <PortfolioActivity portfolio={data.Portfolio} />
+      </PortfolioStyles>
       <PortfolioPerformance portfolio={data.Portfolio} />
     </div>
   );
