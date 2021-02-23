@@ -10,35 +10,47 @@ import { portfolioSummary, earliestDate } from "../lib/portfolioFunctions";
 import { DateTime } from "luxon";
 
 function PortfolioListItem({ portfolio }) {
-  let summary = {
+  console.log("portfolio here", portfolio);
+  let startDate = new Date();
+  let invested = 0;
+  let stock = 0;
+  let cash = 0;
+  let roi = 0;
+  let total = 0;
+
+  let summaryObj = {
     stock: 0,
     cash: 0,
     total: 0,
   };
-  console.log(
-    "Portfolio earliest date",
-    portfolio.name,
-    earliestDate(portfolio)
-  );
-  if (portfolio.performance.length > 0) {
-    summary = portfolio.performance[portfolio.performance.length - 1].summary;
-  }
 
-  //   let portfolioSummary = portfolioSummary(portfolio.performance)
+  //   let listComponent =
 
-  let portfolioSummaryObj = portfolioSummary(portfolio.performance);
-  let startDate = DateTime.fromMillis(
-    Date.parse(new Date(earliestDate(portfolio))),
-    {
-      zone: "America/New_York",
-    }
-  );
-  let invested = portfolioSummaryObj.investment;
-  let roi = parseFloat(portfolioSummaryObj.roi).toFixed(2);
-  // let roi = parseFloat(portfolioSummary(portfolio.performance).roi).toFixed(2);
+  //   if (portfolio.orders.length !== 0) {
+  //     // let portfolioSummary = portfolioSummary(portfolio.performance);
+  //     console.log(
+  //       "Portfolio earliest date",
+  //       portfolio.name,
+  //       earliestDate(portfolio)
+  //     );
+  //     summaryObj =
+  //       portfolio.performance[portfolio.performance.length - 1].summary;
+  //     let portfolioSummaryObj = portfolioSummary(portfolio.performance);
+  //     startDate = DateTime.fromMillis(
+  //       Date.parse(new Date(earliestDate(portfolio))),
+  //       {
+  //         zone: "America/New_York",
+  //       }
+  //     );
+  //     invested = portfolioSummaryObj.investment;
+  //     stock = summaryObj.stock;
+  //     cash = summaryObj.cash;
+  //     total = summaryObj.total;
+  //     roi = parseFloat(portfolioSummaryObj.roi).toFixed(2);
+  //   }
+
   let roiColor = roi > 0 ? "green" : roi === 0 ? "black" : "red";
 
-  console.log("start Date", portfolioSummary(portfolio.performance).startDate);
   return (
     <tr>
       <td>
@@ -46,14 +58,15 @@ function PortfolioListItem({ portfolio }) {
       </td>
       <td>
         {format(
-          new Date(startDate.year, startDate.month - 1, startDate.day),
+          startDate,
+          //   new Date(startDate.year, startDate.month - 1, startDate.day),
           "MM-dd-yyyy"
         )}
       </td>
       <td>{formatMoney(invested)}</td>
-      <td>{formatMoney(summary.stock)}</td>
-      <td>{formatMoney(summary.cash)}</td>
-      <td>{formatMoney(summary.total)}</td>
+      <td>{formatMoney(stock)}</td>
+      <td>{formatMoney(cash)}</td>
+      <td>{formatMoney(total)}</td>
       <td style={{ color: roiColor }}>{roi + "%"}</td>
     </tr>
   );

@@ -14,6 +14,7 @@ export function uniqueTickers(Portfolio) {
 // function to sort orders
 export function sortOrders(Portfolio, sortOrder) {
   let sortedActivity = [...Portfolio.orders];
+  console.log("sortedActivity", sortedActivity);
   if (sortOrder === "asc") {
     return sortedActivity.sort((a, b) => new Date(a.date) - new Date(b.date));
   }
@@ -86,6 +87,7 @@ export function buildPortfolioData(
   stockData,
   portfolioOrders
 ) {
+  console.log("buildPortfolioData called");
   let portfolioData = [];
   uniqueDatesArray.forEach((date) => {
     // creates an object for each day to be populated
@@ -130,11 +132,13 @@ export function buildPortfolioData(
 // function to actually calculate performance
 // INPUTS: uniqueTickersArray, portfolioShell,
 export function calculatePerformance(uniqueTickersArray, portfolioShell) {
+  console.log("calculatePerformance called");
   let cash = 0;
   let stockAssets = 0;
 
   // calculate the stock shares for each stock each day
   uniqueTickersArray.forEach((ticker) => {
+    console.log("ticker", ticker);
     let shares = 0;
     portfolioShell.forEach((day) => {
       // filter orders for this ticker only
@@ -188,12 +192,13 @@ export function calculatePerformance(uniqueTickersArray, portfolioShell) {
 }
 
 export function getPortfolioPerformance(portfolio) {
+  console.log("getPerformance called", portfolio.name);
   // trying to use hooks to store response in state
   const [response, setResponse] = useState([]);
 
   // if no portfolio passed return object with blank performance
   if (!portfolio || portfolio.orders.length === 0) {
-    console.log("no portfolio or orders");
+    console.log("no portfolio or orders", portfolio.name);
     return {
       id: portfolio.id,
       name: portfolio.name,
@@ -211,9 +216,9 @@ export function getPortfolioPerformance(portfolio) {
   let end_date = Date.parse(new Date());
 
   //   // get ticker data from API
-  //   let stockAPIData = uniqueTickersArray.map((ticker) =>
-  //     fetchStockData(ticker, beg_date, end_date)
-  //   );
+  //   let stockAPIData = uniqueTickersArray.map((ticker) => {
+  //     fetchStockData(ticker, beg_date, end_date);
+  //   });
 
   //   //   update state if portfolio activity changes
   //   useEffect(() => {
@@ -236,11 +241,10 @@ export function getPortfolioPerformance(portfolio) {
   // attach ticker to each daily result
   response.map((response) => attachTicker(response));
   let stockData = [];
-  response.forEach(
-    (response) => (stockData = [...stockData, ...response.results])
-  );
-
-  //   console.log("stockData", stockData);
+  response.forEach((response) => {
+    stockData = [...stockData, ...response.results];
+    console.log("stockData", stockData);
+  });
 
   let uniqueDates = getUniqueDates(stockData);
 
@@ -252,6 +256,7 @@ export function getPortfolioPerformance(portfolio) {
     stockData,
     portfolio.orders
   );
+  console.log("stock data herezzz", stockData);
 
   let portfolioPerformance = calculatePerformance(
     uniqueTickersArray,
@@ -271,6 +276,7 @@ export function getPortfolioPerformance(portfolio) {
 
 // get rate of return as ending value over total cash invested
 export function portfolioSummary(portfolioPerformance) {
+  console.log("portfolioSummary called");
   if (portfolioPerformance.length === 0)
     return {
       startDate: 0,
@@ -288,8 +294,7 @@ export function portfolioSummary(portfolioPerformance) {
       }
     });
   });
-  //   console.log("final amount", finalValue);
-  //   console.log("invested", invested);
+
   return {
     startDate: portfolioPerformance[0].date,
     roi: (finalValue / invested - 1) * 100,
