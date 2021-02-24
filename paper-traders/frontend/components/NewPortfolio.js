@@ -9,6 +9,11 @@ import { useMutation, useQuery } from "@apollo/client";
 import { CURRENT_USER_QUERY, useUser } from "./User";
 import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
+import NewPortfolioStyles from "./styles/NewPortfolioStyles";
+
+const fieldsetStyle = {
+  background: "blue",
+};
 
 const NEW_PORTFOLIO_MUTATION = gql`
   mutation NEW_PORTFOLIO_MUTATION(
@@ -22,10 +27,10 @@ const NEW_PORTFOLIO_MUTATION = gql`
   }
 `;
 
-// optimistic promise to update the cache
-function update(cache, payload) {
-  cache.evict(cache.identify(payload.data.createPortfolio));
-}
+// // optimistic promise to update the cache
+// function update(cache, payload) {
+//   cache.evict(cache.identify(payload.data.authenticatedItem));
+// }
 
 export default function NewPortfolio() {
   const user = useUser();
@@ -35,11 +40,11 @@ export default function NewPortfolio() {
     name: "",
     userId: user.id,
   });
-  const [createOrder, { loading, error, data }] = useMutation(
+  const [createPortfolio, { loading, error, data }] = useMutation(
     NEW_PORTFOLIO_MUTATION,
     {
       variables: inputs,
-      update,
+      // update,
 
       // refetch the currently logged in user
       // refetchQueries: [{ query: CURRENT_USER_QUERY }],
@@ -51,7 +56,7 @@ export default function NewPortfolio() {
   console.log("new portfolio", inputs);
   return (
     <div>
-      <Form
+      <form
         onSubmit={async (e) => {
           e.preventDefault();
           // console.log("inputs", inputs);
@@ -62,24 +67,26 @@ export default function NewPortfolio() {
           inputs.userId = user.id;
         }}
       >
-        <h3>New Order</h3>
         <DisplayError error={error} />
-        <fieldset disabled={loading}>
+        <fieldset disabled={loading} id="new_portfolio">
           {/* Input for portfolio name */}
-          <label htmlFor="name">
-            Name:
-            <input
-              required
-              type="text"
-              id="name"
-              name="name"
-              value={inputs.name}
-              onChange={handleChange}
-            />
-          </label>
-          <button type="submit">Add Portfolio</button>
+          {/* <label htmlFor="name"> */}
+          {/* Name: */}
+          <input
+            required
+            type="text"
+            id="name"
+            name="name"
+            value={inputs.name}
+            placeholder="Add Portfolio"
+            onChange={handleChange}
+          />
+          {/* </label> */}
+          <button id="add_portfolio_button" type="submit">
+            Add Portfolio
+          </button>
         </fieldset>
-      </Form>
+      </form>
     </div>
   );
 }

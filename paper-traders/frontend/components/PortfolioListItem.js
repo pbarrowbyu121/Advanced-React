@@ -8,6 +8,7 @@ import formatMoney from "../lib/formatMoney";
 import Link from "next/link";
 import { portfolioSummary, earliestDate } from "../lib/portfolioFunctions";
 import { DateTime } from "luxon";
+import DeletePortfolio from "./DeletePortfolio";
 
 function PortfolioListItem({ portfolio }) {
   console.log("portfolio here", portfolio);
@@ -24,30 +25,28 @@ function PortfolioListItem({ portfolio }) {
     total: 0,
   };
 
-  //   let listComponent =
+  if (portfolio.performance.length !== 0 && portfolio.orders.length !== 0) {
+    // startDate = new Date(2021, 0, 6);
+    let portfolioSummaryObj = portfolioSummary(portfolio.performance);
+    console.log("startDate", portfolioSummaryObj.startDate);
+    console.log(
+      "Portfolio earliest date",
+      portfolio.name,
+      earliestDate(portfolio)
+    );
+    startDate = DateTime.fromMillis(portfolioSummaryObj.startDate, {
+      zone: "America/New_York",
+    });
+    startDate = new Date(startDate.year, startDate.month - 1, startDate.day);
 
-  //   if (portfolio.orders.length !== 0) {
-  //     // let portfolioSummary = portfolioSummary(portfolio.performance);
-  //     console.log(
-  //       "Portfolio earliest date",
-  //       portfolio.name,
-  //       earliestDate(portfolio)
-  //     );
-  //     summaryObj =
-  //       portfolio.performance[portfolio.performance.length - 1].summary;
-  //     let portfolioSummaryObj = portfolioSummary(portfolio.performance);
-  //     startDate = DateTime.fromMillis(
-  //       Date.parse(new Date(earliestDate(portfolio))),
-  //       {
-  //         zone: "America/New_York",
-  //       }
-  //     );
-  //     invested = portfolioSummaryObj.investment;
-  //     stock = summaryObj.stock;
-  //     cash = summaryObj.cash;
-  //     total = summaryObj.total;
-  //     roi = parseFloat(portfolioSummaryObj.roi).toFixed(2);
-  //   }
+    invested = portfolioSummaryObj.investment;
+    stock =
+      portfolio.performance[portfolio.performance.length - 1].summary.stock;
+    cash = portfolio.performance[portfolio.performance.length - 1].summary.cash;
+    total =
+      portfolio.performance[portfolio.performance.length - 1].summary.total;
+    roi = parseFloat(portfolioSummaryObj.roi).toFixed(2);
+  }
 
   let roiColor = roi > 0 ? "green" : roi === 0 ? "black" : "red";
 
@@ -56,18 +55,15 @@ function PortfolioListItem({ portfolio }) {
       <td>
         <Link href={`/portfolio/${portfolio.id}`}>{portfolio.name}</Link>
       </td>
-      <td>
-        {format(
-          startDate,
-          //   new Date(startDate.year, startDate.month - 1, startDate.day),
-          "MM-dd-yyyy"
-        )}
-      </td>
+      <td>{format(startDate, "MM-dd-yyyy")}</td>
       <td>{formatMoney(invested)}</td>
       <td>{formatMoney(stock)}</td>
       <td>{formatMoney(cash)}</td>
       <td>{formatMoney(total)}</td>
       <td style={{ color: roiColor }}>{roi + "%"}</td>
+      <td>
+        <DeletePortfolio id={portfolio.id} />
+      </td>
     </tr>
   );
 }

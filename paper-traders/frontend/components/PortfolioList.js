@@ -8,8 +8,10 @@ import { CURRENT_USER_QUERY, useUser } from "./User";
 import PortfolioListItem from "./PortfolioListItem";
 import TableTitle from "./styles/TableTitle";
 import TableStyles from "./styles/TableStyles";
-import { getPortfolioPerformance } from "../lib/portfolioFunctions";
+import { getPortfolioPerformance } from "../lib/getPortfolioPerformance";
 import PortfolioStyles from "./styles/PortfolioStyles";
+import NewPortfolio from "./NewPortfolio";
+import NewPortfolioStyles from "./styles/NewPortfolioStyles";
 
 function PortfolioList() {
   const user = useUser();
@@ -30,6 +32,7 @@ function PortfolioList() {
               <th>Cash</th>
               <th>Total</th>
               <th>ROI</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -39,10 +42,16 @@ function PortfolioList() {
                 key={portfolio.id}
               />
             ))}
+            <tr>
+              <td colspan="3">
+                <NewPortfolioStyles>
+                  <NewPortfolio />
+                </NewPortfolioStyles>
+              </td>
+            </tr>
           </tbody>
         </TableStyles>
       </PortfolioStyles>
-      <div>Add New Portfolio</div>
     </div>
   );
 }

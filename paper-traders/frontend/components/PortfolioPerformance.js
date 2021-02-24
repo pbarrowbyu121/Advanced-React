@@ -1,4 +1,4 @@
-import { getPortfolioPerformance } from "../lib/portfolioFunctions";
+import { getPortfolioPerformance } from "../lib/getPortfolioPerformance";
 import PortfolioChart from "./PortfolioChart";
 import { TSLA_response, AMZN_response } from "../lib/dummyData";
 
