@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const NewPortfolioStyles = styled.table`
+const NewPortfolioStyles = styled.tr`
   border-spacing: 0;
   width: 100%;
   border: 1px solid var(--offWhite);

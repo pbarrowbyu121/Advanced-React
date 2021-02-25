@@ -11,10 +11,6 @@ import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
 import NewPortfolioStyles from "./styles/NewPortfolioStyles";
 
-const fieldsetStyle = {
-  background: "blue",
-};
-
 const NEW_PORTFOLIO_MUTATION = gql`
   mutation NEW_PORTFOLIO_MUTATION(
     # which variables are passed in and types
@@ -51,42 +47,45 @@ export default function NewPortfolio() {
     }
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  console.log("new portfolio", inputs);
+  if (loading) return <td>Loading...</td>;
+  if (error) return <td>Error: {error}</td>;
   return (
-    <div>
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          // console.log("inputs", inputs);
-          // submit the input fields to the backend
-          const res = await createPortfolio();
-          console.log("new portfolio", res);
-          clearForm();
-          inputs.userId = user.id;
-        }}
-      >
-        <DisplayError error={error} />
-        <fieldset disabled={loading} id="new_portfolio">
-          {/* Input for portfolio name */}
-          {/* <label htmlFor="name"> */}
-          {/* Name: */}
-          <input
-            required
-            type="text"
-            id="name"
-            name="name"
-            value={inputs.name}
-            placeholder="Add Portfolio"
-            onChange={handleChange}
-          />
-          {/* </label> */}
-          <button id="add_portfolio_button" type="submit">
-            Add Portfolio
-          </button>
-        </fieldset>
-      </form>
-    </div>
+    <NewPortfolioStyles>
+      {/* <tr> */}
+      <td colSpan="3">
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            // console.log("inputs", inputs);
+            // submit the input fields to the backend
+            const res = await createPortfolio();
+            console.log("new portfolio", res);
+            clearForm();
+            inputs.userId = user.id;
+          }}
+        >
+          <DisplayError error={error} />
+          <fieldset disabled={loading} id="new_portfolio">
+            {/* Input for portfolio name */}
+            {/* <label htmlFor="name"> */}
+            {/* Name: */}
+            <input
+              required
+              type="text"
+              id="name"
+              name="name"
+              value={inputs.name}
+              placeholder="Add Portfolio"
+              onChange={handleChange}
+            />
+            {/* </label> */}
+            <button id="add_portfolio_button" type="submit">
+              Add Portfolio
+            </button>
+          </fieldset>
+        </form>
+      </td>
+      {/* </tr> */}
+    </NewPortfolioStyles>
   );
 }

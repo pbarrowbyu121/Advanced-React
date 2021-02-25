@@ -42,13 +42,7 @@ function PortfolioList() {
                 key={portfolio.id}
               />
             ))}
-            <tr>
-              <td colspan="3">
-                <NewPortfolioStyles>
-                  <NewPortfolio />
-                </NewPortfolioStyles>
-              </td>
-            </tr>
+            <NewPortfolio />
           </tbody>
         </TableStyles>
       </PortfolioStyles>

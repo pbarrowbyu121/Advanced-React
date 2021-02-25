@@ -11,6 +11,12 @@ import { DateTime } from "luxon";
 import DeletePortfolio from "./DeletePortfolio";
 
 function PortfolioListItem({ portfolio }) {
+  if (!portfolio)
+    return (
+      <tr>
+        <td>No portfolio</td>
+      </tr>
+    );
   console.log("portfolio here", portfolio);
   let startDate = new Date();
   let invested = 0;
@@ -25,7 +31,11 @@ function PortfolioListItem({ portfolio }) {
     total: 0,
   };
 
-  if (portfolio.performance.length !== 0 && portfolio.orders.length !== 0) {
+  if (
+    portfolio &&
+    portfolio.orders.length !== 0 &&
+    portfolio.performance.length !== 0
+  ) {
     // startDate = new Date(2021, 0, 6);
     let portfolioSummaryObj = portfolioSummary(portfolio.performance);
     console.log("startDate", portfolioSummaryObj.startDate);
