@@ -53,6 +53,10 @@ export default function useForm(initial = {}) {
     if (blankState.userId === "") {
       blankState.userId = initial.userId;
     }
+    // don't reset the portfolio Id
+    if (blankState.portfolioId === "") {
+      blankState.portfolioId = initial.portfolioId;
+    }
     setInputs(blankState);
   }
 

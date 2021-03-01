@@ -4,7 +4,7 @@ import { index } from "d3";
 
 const PortfolioChart = ({ data }) => {
   const svg = React.useRef(null);
-  console.log("chart data", data);
+  // console.log("chart data", data);
 
   React.useEffect(() => {
     if (data.length > 0) {
@@ -21,7 +21,7 @@ const PortfolioChart = ({ data }) => {
 };
 
 function drawChart(dataInput, svgRef) {
-  console.log("dataInput here", dataInput);
+  // console.log("dataInput here", dataInput);
   const h = 500;
   const w = 700;
   const padding = 60;

@@ -19,12 +19,12 @@ const TableStyles = styled.table`
     &:last-child {
       border-right: none;
       width: 150px;
-      button {
+      /* button {
         width: 50%;
         background-color: var(--red);
         display: block;
         margin: auto;
-      }
+      } */
     }
   }
   tr {

@@ -59,7 +59,6 @@ export default function NewPortfolio() {
             // console.log("inputs", inputs);
             // submit the input fields to the backend
             const res = await createPortfolio();
-            console.log("new portfolio", res);
             clearForm();
             inputs.userId = user.id;
           }}

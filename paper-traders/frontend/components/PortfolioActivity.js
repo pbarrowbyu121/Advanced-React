@@ -4,10 +4,15 @@ import TableTitle from "./styles/TableTitle";
 import Order from "./Order";
 import { sortOrders } from "../lib/portfolioFunctions";
 import styled from "styled-components";
+import NewOrder from "./NewOrder";
+import { useState, useEffect } from "react";
+import AddCircleIcon from "@material-ui/icons/AddCircle";
+import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
+import NewOrderStyles from "./styles/NewOrderStyles";
 
-export default function PortfolioActivity({ portfolio }) {
+export default function PortfolioActivity({ portfolioId, portfolio }) {
   if (!portfolio || portfolio.orders.length === 0) {
-    console.log("portfolio", portfolio);
+    // console.log("portfolio", portfolio);
     return <p>Nothing to see here</p>;
   }
   // console.log("orders here", portfolio.orders.length);
@@ -24,8 +29,7 @@ export default function PortfolioActivity({ portfolio }) {
             <th>Price</th>
             <th>Total</th>
             <th>Date</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Edit / Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +40,4 @@ export default function PortfolioActivity({ portfolio }) {
       </TableStyles>
     </div>
   );
-
-  // sort the portfolio activity so most recent orders at top
 }

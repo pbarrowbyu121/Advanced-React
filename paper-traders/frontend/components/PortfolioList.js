@@ -15,7 +15,7 @@ import NewPortfolioStyles from "./styles/NewPortfolioStyles";
 
 function PortfolioList() {
   const user = useUser();
-  console.log("user", user);
+  // console.log("user", user);
   if (!user) return null;
 
   return (

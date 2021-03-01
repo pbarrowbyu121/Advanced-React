@@ -13,7 +13,7 @@
 //     }
 // FUNCTIONS CALLED:
 export function calculatePerformance(uniqueTickersArray, portfolioShell) {
-  console.log("calculatePerformance called");
+  // console.log("calculatePerformance called");
   let cash = 0;
   let stockAssets = 0;
 
@@ -68,6 +68,6 @@ export function calculatePerformance(uniqueTickersArray, portfolioShell) {
     // need to reset stock assets to 0 before next day is calculated
     stockAssets = 0;
   });
-  console.log("calculatePerformance return", portfolioShell);
+  // console.log("calculatePerformance return", portfolioShell);
   return portfolioShell;
 }

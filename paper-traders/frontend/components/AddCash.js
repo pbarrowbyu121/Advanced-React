@@ -43,7 +43,7 @@ function update(cache, payload) {
   cache.evict(cache.identify(payload.data.createOrder));
 }
 
-export default function AddCash() {
+export default function AddCash({ portfolioId }) {
   const user = useUser();
   if (!user) return null;
   // console.log("user", user);
@@ -54,7 +54,7 @@ export default function AddCash() {
     price: 1,
     date: "",
     // dateUTC: 0,
-    portfolioId: "",
+    portfolioId: portfolioId,
     userId: user.id,
   });
   const [createOrder, { loading, error, data }] = useMutation(
@@ -94,23 +94,6 @@ export default function AddCash() {
               onChange={handleChange}
             />
           </label>
-          {/* input for portfolio */}
-          <label htmlFor="portfolio">
-            Portfolio:
-            <select
-              name="portfolioId"
-              value={inputs.portfolioId}
-              onChange={handleChange}
-            >
-              <option value={null}>Select one</option>
-              {user &&
-                user.portfolios.map((portfolio) => (
-                  <option key={portfolio.id} value={portfolio.id}>
-                    {portfolio.name}
-                  </option>
-                ))}
-            </select>
-          </label>
           {/* input field for date of Order */}
           <div>
             <label htmlFor="date">
@@ -126,10 +109,10 @@ export default function AddCash() {
           </div>
 
           {/* button to clear the form */}
-          <button type="button" onClick={clearForm}>
+          <button type="submit">Add Cash</button>
+          <a onClick={clearForm} style={{ cursor: "pointer" }}>
             Clear Form
-          </button>
-          <button type="submit">Execute Order</button>
+          </a>
         </fieldset>
       </Form>
     </div>

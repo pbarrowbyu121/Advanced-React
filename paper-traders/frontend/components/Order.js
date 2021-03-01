@@ -19,10 +19,8 @@ function Order({ order }) {
       <td>
         <Link href={{ pathname: "../update", query: { id: order.id } }}>
           Edit
-        </Link>
-      </td>
-      <td>
-        <DeleteOrder id={order.id} />
+        </Link>{" "}
+        / <DeleteOrder id={order.id} />
       </td>
     </tr>
   );

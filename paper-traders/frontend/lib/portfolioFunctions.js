@@ -25,10 +25,6 @@ export function sortOrders(Portfolio, sortOrder) {
 
 // function to get earliest date of order
 export function earliestDate(Portfolio) {
-  //   if (Portfolio.orders.length == 0) {
-  //     console.log("no orders");
-  //     return 0;
-  //   }
   return sortOrders(Portfolio, "asc")[0].date;
 }
 
@@ -81,14 +77,14 @@ export function getUniqueDates(stockData) {
 // get rate of return as ending value over total cash invested
 // IMPROVE THIS TO INCLUDE STOCK, CASH, TOTAL
 export function portfolioSummary(portfolioPerformance) {
-  console.log("portfolioSummary called");
+  // console.log("portfolioSummary called");
   if (portfolioPerformance.length === 0)
     return {
       startDate: 0,
       roi: 0,
       investment: 0,
     };
-  console.log("portfolioPerformance", portfolioPerformance);
+  // console.log("portfolioPerformance", portfolioPerformance);
   let invested = 0;
   let finalValue =
     portfolioPerformance[portfolioPerformance.length - 1].summary.total;
@@ -105,6 +101,6 @@ export function portfolioSummary(portfolioPerformance) {
     roi: (finalValue / invested - 1) * 100,
     investment: invested,
   };
-  console.log("portfolio Summary", summaryObj);
+  // console.log("portfolio Summary", summaryObj);
   return summaryObj;
 }

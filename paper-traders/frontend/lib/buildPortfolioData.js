@@ -21,7 +21,7 @@ export function buildPortfolioData(
   stockData,
   portfolioOrders
 ) {
-  console.log("buildPortfolioData called");
+  // console.log("buildPortfolioData called");
   let portfolioData = [];
   uniqueDatesArray.forEach((date) => {
     // creates an object for each day to be populated
@@ -60,6 +60,6 @@ export function buildPortfolioData(
     // Push the portfolio day into the portfolio array
     portfolioData.push(tempPortDay);
   });
-  console.log("buildPortfolioData return", portfolioData);
+  // console.log("buildPortfolioData return", portfolioData);
   return portfolioData;
 }

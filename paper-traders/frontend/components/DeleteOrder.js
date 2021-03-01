@@ -2,6 +2,10 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY, useUser } from "./User";
 
+const deleteStyle = {
+  cursor: "pointer",
+  color: "var(--red)",
+};
 const DELETE_ORDER_MUTATION = gql`
   mutation DELETE_ORDER_MUTATION($id: ID!) {
     deleteOrder(id: $id) {
@@ -30,13 +34,21 @@ export default function DeleteOrder({ id }) {
   });
 
   return (
-    <button
-      type="button"
+    // <button
+    //   type="button"
+    //   title="Delete this order"
+    //   onClick={deleteOrder}
+    //   disabled={loading}
+    // >
+    //   &times;
+    // </button>
+    <a
       title="Delete this order"
       onClick={deleteOrder}
       disabled={loading}
+      style={deleteStyle}
     >
-      &times;
-    </button>
+      DELETE
+    </a>
   );
 }

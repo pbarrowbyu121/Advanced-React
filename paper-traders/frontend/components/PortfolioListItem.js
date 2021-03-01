@@ -17,7 +17,7 @@ function PortfolioListItem({ portfolio }) {
         <td>No portfolio</td>
       </tr>
     );
-  console.log("portfolio here", portfolio);
+
   let startDate = new Date();
   let invested = 0;
   let stock = 0;
@@ -38,12 +38,7 @@ function PortfolioListItem({ portfolio }) {
   ) {
     // startDate = new Date(2021, 0, 6);
     let portfolioSummaryObj = portfolioSummary(portfolio.performance);
-    console.log("startDate", portfolioSummaryObj.startDate);
-    console.log(
-      "Portfolio earliest date",
-      portfolio.name,
-      earliestDate(portfolio)
-    );
+
     startDate = DateTime.fromMillis(portfolioSummaryObj.startDate, {
       zone: "America/New_York",
     });
