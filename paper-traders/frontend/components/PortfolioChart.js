@@ -8,8 +8,12 @@ const PortfolioChart = ({ data }) => {
 
   React.useEffect(() => {
     if (data.length > 0) {
-      d3.selectAll(svg.current).remove().exit();
+      // console.log("data", data);
+      d3.selectAll(svg.current).exit().remove();
       drawChart(data, svg);
+      // console.log("chart useEffect called");
+
+      // console.log("svg current", svg.current);
     }
   }, [svg, data]);
 
@@ -27,8 +31,8 @@ function drawChart(dataInput, svgRef) {
   const padding = 60;
 
   // min and max stock prices
-  const minStock = d3.min(dataInput, (d) => d.summary.total);
-  const maxStock = d3.max(dataInput, (d) => d.summary.total);
+  const minStock = d3.min(dataInput, (d) => d.daySummary.total);
+  const maxStock = d3.max(dataInput, (d) => d.daySummary.total);
 
   // min and max dates
   const minDate = d3.min(dataInput, (d) => new Date(d.date));
@@ -61,7 +65,7 @@ function drawChart(dataInput, svgRef) {
       return xScale(d.date);
     })
     .y((d) => {
-      return yScale(d.summary.total);
+      return yScale(d.daySummary.total);
     });
 
   // Append the path and bind data

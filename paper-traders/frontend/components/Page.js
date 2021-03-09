@@ -1,9 +1,17 @@
 import { loadGetInitialProps } from "next/dist/next-server/lib/utils";
-import React from "react";
+import { getPortfolioPerformance } from "../lib/getPortfolioPerformance";
+import React, { useContext, useState, useEffect } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
 import PropTypes from "prop-types";
 import styled, { createGlobalStyle } from "styled-components";
+import { useUser } from "./User";
+import { UserContext, UserProvider } from "../contexts/UserContext";
+import { TSLA_response, AMZN_response, AAPL_response } from "../lib/dummyData";
+import { portfolioSummary } from "../lib/portfolioFunctions";
+import getStockData from "../lib/getStockData";
+
+// const stockAPIData = [TSLA_response, AMZN_response, AAPL_response];
 
 const GlobalStyles = createGlobalStyle`
  html {
@@ -46,9 +54,11 @@ function Page({ children }) {
   return (
     <div>
       <GlobalStyles />
-      <Header />
-      {children}
-      <Footer />
+      <UserProvider>
+        <Header />
+        {children}
+        <Footer />
+      </UserProvider>
     </div>
   );
 }

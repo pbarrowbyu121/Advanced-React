@@ -46,6 +46,21 @@ export function fetchStockData(ticker, beg_date, end_date) {
   return response;
 }
 
+export function createFetchURL(ticker, beg_date, end_date) {
+  let API_Key = "O1F92HXG7p_OFdN7G7RZsaTZd_Or7pEi";
+  let url =
+    "https://api.polygon.io/v2/aggs/ticker/" +
+    ticker +
+    "/range/1/day/" +
+    beg_date +
+    "/" +
+    end_date +
+    "?apiKey=" +
+    API_Key;
+
+  return url;
+}
+
 // function assigns tickers to API response results
 export function attachTicker(response) {
   return response.results.forEach(
@@ -63,6 +78,11 @@ export function getUnixCode(orderDate) {
     zone: "America/New_York",
   });
   return dateUTC.ts;
+}
+
+export function getDateFromMillis(unixCode) {
+  let date0 = DateTime.fromMillis(unixCode, { zone: "America/New_York" });
+  return date0;
 }
 
 // get Array of unique dates from API response
@@ -83,13 +103,34 @@ export function portfolioSummary(portfolioPerformance) {
       startDate: 0,
       roi: 0,
       investment: 0,
+      stock: 0,
+      cash: 0,
+      total: 0,
     };
+
+  let stock =
+    portfolioPerformance[portfolioPerformance.length - 1].daySummary.stock;
+  let cash =
+    portfolioPerformance[portfolioPerformance.length - 1].daySummary.cash;
+
+  let total =
+    portfolioPerformance[portfolioPerformance.length - 1].daySummary.total;
   // console.log("portfolioPerformance", portfolioPerformance);
   let invested = 0;
   let finalValue =
-    portfolioPerformance[portfolioPerformance.length - 1].summary.total;
+    portfolioPerformance[portfolioPerformance.length - 1].daySummary.total;
+
+  // initialize earliest order day with last date, will be replaced with earliest date
+  let firstOrderDate =
+    portfolioPerformance[portfolioPerformance.length - 1].date;
+
   portfolioPerformance.forEach((day) => {
+    // find earliest day with an order
+    if (day.orders.length > 0 && day.date <= firstOrderDate) {
+      firstOrderDate = day.date;
+    }
     day.orders.forEach((order) => {
+      // find total cash invested in portfolio
       if (order.action === "BUY" && order.ticker === "$CASH") {
         invested = invested + order.shares * order.price;
       }
@@ -97,9 +138,12 @@ export function portfolioSummary(portfolioPerformance) {
   });
 
   let summaryObj = {
-    startDate: portfolioPerformance[0].date,
+    startDate: firstOrderDate,
     roi: (finalValue / invested - 1) * 100,
     investment: invested,
+    stock,
+    cash,
+    total,
   };
   // console.log("portfolio Summary", summaryObj);
   return summaryObj;

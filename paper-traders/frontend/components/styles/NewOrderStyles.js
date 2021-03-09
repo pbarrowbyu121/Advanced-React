@@ -9,6 +9,9 @@ const NewOrderStyles = styled.div`
   z-index: 10;
   top: 0;
   right: 0;
+  a {
+    cursor: pointer;
+  }
 `;
 
 export default NewOrderStyles;

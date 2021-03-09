@@ -1,5 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 
+import { TSLA_response, AMZN_response, AAPL_response } from "../lib/dummyData";
+
 export const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
     authenticatedItem {
@@ -7,11 +9,11 @@ export const CURRENT_USER_QUERY = gql`
         id
         email
         name
-        #TODO query the cart /portfolios
         portfolios {
           id
           name
           orders {
+            id
             action
             ticker
             price

@@ -26,7 +26,7 @@ export function buildPortfolioData(
   uniqueDatesArray.forEach((date) => {
     // creates an object for each day to be populated
     let tempPortDay = {
-      summary: {},
+      daySummary: {},
       date: date,
       stocks: [],
       orders: [],

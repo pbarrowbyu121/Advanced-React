@@ -46,7 +46,7 @@ export function calculatePerformance(uniqueTickersArray, portfolioShell) {
     day.stocks.forEach((stock) => {
       stockAssets = stockAssets + stock.c * stock.shares;
     });
-    day.summary.stock = stockAssets;
+    day.daySummary.stock = stockAssets;
 
     // calculate the cash for each day
     day.orders.forEach((order) => {
@@ -62,8 +62,8 @@ export function calculatePerformance(uniqueTickersArray, portfolioShell) {
         }
       }
     });
-    day.summary.cash = cash;
-    day.summary.total = cash + stockAssets;
+    day.daySummary.cash = cash;
+    day.daySummary.total = cash + stockAssets;
 
     // need to reset stock assets to 0 before next day is calculated
     stockAssets = 0;

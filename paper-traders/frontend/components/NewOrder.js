@@ -59,7 +59,7 @@ function checkAction(inputs, portfolioPerformance) {
   // If BUY, check there is enough cash on that day
 
   if (inputs.action === "BUY") {
-    cashCheck = inputs.price * inputs.shares <= checkDay.summary.cash;
+    cashCheck = inputs.price * inputs.shares <= checkDay.daySummary.cash;
     console.log("cashCheck", cashCheck);
     return cashCheck;
   }
@@ -82,7 +82,7 @@ function update(cache, payload) {
 }
 
 export default function NewOrder({ portfolioId, portfolioPerformance }) {
-  // console.log("NewOrder portfolioPerformanc", portfolioPerformance);
+  console.log("NewOrder portfolioPerformance", portfolioPerformance);
 
   // console.log("NewOrder here", portfolioId);
   const user = useUser();

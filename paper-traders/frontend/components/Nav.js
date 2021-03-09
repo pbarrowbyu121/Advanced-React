@@ -13,7 +13,7 @@ export default function Nav() {
       {user && (
         <>
           <Link href="/stocksearch">Stock Search</Link>
-          <Link href="/neworder">New Order</Link>
+          {/* <Link href="/neworder">New Order</Link> */}
           <Link href="/portfolios">Portfolios</Link>
           <SignOut />
         </>

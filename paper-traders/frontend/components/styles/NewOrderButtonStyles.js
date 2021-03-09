@@ -6,6 +6,7 @@ const NewOrderButtonStyles = styled.div`
   width: 80%;
   a {
     padding: 5px;
+    cursor: pointer;
   }
   /* padding: 10px; */
   /* margin-left: 20rem; */

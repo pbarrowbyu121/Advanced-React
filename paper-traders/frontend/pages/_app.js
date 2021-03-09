@@ -3,6 +3,9 @@ import App, { Container } from "next/app";
 import Page from "../components/Page";
 import withData from "../lib/withData";
 import "../css/main.css";
+import { UserContext } from "../components/User.js";
+import { TSLA_response, AMZN_response, AAPL_response } from "../lib/dummyData";
+import { useUser } from "../components/User";
 
 class MyApp extends App {
   render() {
