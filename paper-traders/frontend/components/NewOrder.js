@@ -6,14 +6,10 @@ import useForm from "../lib/useForm";
 import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
-import { CURRENT_USER_QUERY, useUser } from "./User";
 import Form from "./styles/Form";
-import formatMoney from "../lib/formatMoney";
-import CartStyles from "./styles/CartStyles";
-// import NewOrderStyles from "./styles/NewOrderStyles";
-import TableStyles from "./styles/TableStyles";
-import NewOrderStyles1 from "./styles/NewOrderStyles";
 import { getUnixCode } from "../lib/portfolioFunctions";
+import NewOrderStyles from "./styles/NewOrderStyles";
+import { CURRENT_USER_QUERY, useUser } from "./User";
 
 const NEW_ORDER_MUTATION = gql`
   mutation NEW_ORDER_MUTATION(
@@ -81,8 +77,12 @@ function update(cache, payload) {
   cache.evict(cache.identify(payload.data.createOrder));
 }
 
-export default function NewOrder({ portfolioId, portfolioPerformance }) {
-  console.log("NewOrder portfolioPerformance", portfolioPerformance);
+export default function NewOrder({
+  portfolioId,
+  portfolioPerformance,
+  handler,
+}) {
+  // console.log("NewOrder portfolioPerformance", portfolioPerformance);
 
   // console.log("NewOrder here", portfolioId);
   const user = useUser();
@@ -124,97 +124,102 @@ export default function NewOrder({ portfolioId, portfolioPerformance }) {
 
   // console.log("new order", inputs);
   return (
-    <Form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        if (checkAction(inputs, portfolioPerformance)) {
-          // submit the input fields to the backend
-          const res = await createOrder();
-          // console.log("new order", res);
-          clearForm();
-          inputs.userId = user.id;
-        } else {
-          console.log("ACTION NOT ALLOWED");
-        }
-      }}
-    >
-      <fieldset disabled={loading}>
-        <DisplayError error={error} />
+    <NewOrderStyles>
+      <a onClick={handler}>Close</a>
+      <Form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (checkAction(inputs, portfolioPerformance)) {
+            // submit the input fields to the backend
+            const res = await createOrder();
+            // console.log("new order", res);
+            clearForm();
+            inputs.userId = user.id;
+          } else {
+            console.log("ACTION NOT ALLOWED");
+          }
+        }}
+      >
+        <fieldset disabled={loading}>
+          <DisplayError error={error} />
 
-        <label htmlFor="ticker">
-          Stock:
-          <input
-            required
-            type="text"
-            id="ticker"
-            name="ticker"
-            value={inputs.ticker}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="ticker">
+            Stock:
+            <input
+              required
+              type="text"
+              id="ticker"
+              name="ticker"
+              value={inputs.ticker}
+              onChange={handleChange}
+            />
+          </label>
 
-        {/* Input for action type */}
+          {/* Input for action type */}
 
-        <label htmlFor="action">
-          Action:
-          <select name="action" value={inputs.action} onChange={handleChange}>
-            <option value="">Select one</option>
-            <option value="BUY">BUY</option>
-            <option value="SELL">SELL</option>
-          </select>
-        </label>
-        {/* Input for shares */}
+          <label htmlFor="action">
+            Action:
+            <select name="action" value={inputs.action} onChange={handleChange}>
+              <option value="">Select one</option>
+              <option value="BUY">BUY</option>
+              <option value="SELL">SELL</option>
+            </select>
+          </label>
+          {/* Input for shares */}
 
-        <label htmlFor="shares">
-          Shares:
-          <input
-            type="number"
-            id="shares"
-            name="shares"
-            value={inputs.shares}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="shares">
+            Shares:
+            <input
+              type="number"
+              id="shares"
+              name="shares"
+              value={inputs.shares}
+              onChange={handleChange}
+            />
+          </label>
 
-        {/* Input for price  */}
+          {/* Input for price  */}
 
-        <label htmlFor="price">
-          Price:
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={inputs.price}
-            onChange={handleChange}
-          />
-        </label>
+          <label htmlFor="price">
+            Price:
+            <input
+              type="number"
+              id="price"
+              name="price"
+              value={inputs.price}
+              onChange={handleChange}
+            />
+          </label>
 
-        {/* input field for date */}
+          {/* input field for date */}
 
-        <label htmlFor="date">
-          Date:
-          <DatePicker
-            type="date"
-            name="date"
-            selected={inputs.date}
-            onChange={handleDateChange}
-            dateFormat="MM/dd/yyyy"
-          />
-        </label>
-        {/* button to add the order */}
-        <button type="submit">Add Order</button>
-        {" / "}
-        {/* button to clear the form */}
-        <a onClick={clearForm} style={{ cursor: "pointer" }}>
-          Clear
-        </a>
-        <button
-          type="button"
-          onClick={() => console.log(checkAction(inputs, portfolioPerformance))}
-        >
-          Press Me
-        </button>
-      </fieldset>
-    </Form>
+          <label htmlFor="date">
+            Date:
+            <DatePicker
+              type="date"
+              name="date"
+              selected={inputs.date}
+              onChange={handleDateChange}
+              dateFormat="MM/dd/yyyy"
+            />
+          </label>
+          {/* button to add the order */}
+          <button type="submit">Add Order</button>
+          {" / "}
+          {/* button to clear the form */}
+          <a onClick={clearForm} style={{ cursor: "pointer" }}>
+            Clear
+          </a>
+          <button
+            type="button"
+            onClick={() =>
+              console.log(checkAction(inputs, portfolioPerformance))
+            }
+          >
+            Press Me
+          </button>
+        </fieldset>
+      </Form>
+    </NewOrderStyles>
   );
 }

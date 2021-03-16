@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const PortfolioPerformanceStyles = styled.div`
+const ChartStyles = styled.div`
   /* display: flex; */
   /* flex-direction: column; */
   /* align-items: center; */
@@ -10,4 +10,4 @@ const PortfolioPerformanceStyles = styled.div`
   /* flex-shrink: 0; */
 `;
 
-export default PortfolioPerformanceStyles;
+export default ChartStyles;

@@ -5,27 +5,29 @@ import Nav from "./Nav";
 
 const Logo = styled.h1`
   font-size: 4rem;
-  margin-left: 2rem;
+  margin-left: 6rem;
   position: relative;
   z-index: 2;
+  border-radius: 20px;
   background: var(--green);
-  transform: skew(-10deg);
   font-family: "Permanent Marker";
   a {
     color: white;
     text-decoration: none;
-    /* text-transform: uppercase; */
     padding: 0.5rem 1rem;
   }
 `;
 
 const HeaderStyles = styled.header`
   .bar {
-    border-bottom: 10px solid var(--black, black);
+    border-bottom: 5px solid var(--black, black);
     display: grid;
     grid-template-columns: auto 1fr;
     justify-content: space-between;
     align-items: stretch;
+  }
+  div {
+    background-color: var(--gray);
   }
   .sub-bar {
     display: grid;
@@ -39,9 +41,12 @@ class Header extends React.Component {
     return (
       <HeaderStyles>
         <div className="bar">
-          <Logo>
-            <Link href="/">PaperTraders</Link>
-          </Logo>
+          <div>
+            <Logo>
+              <Link href="/">PaperTrader$</Link>
+            </Logo>
+          </div>
+
           <Nav />
         </div>
       </HeaderStyles>

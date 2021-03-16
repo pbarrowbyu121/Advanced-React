@@ -7,8 +7,6 @@ import DisplayError from "./ErrorMessage";
 import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
 import { CURRENT_USER_QUERY, useUser } from "./User";
-import Form from "./styles/Form";
-import formatMoney from "../lib/formatMoney";
 import NewPortfolioStyles from "./styles/NewPortfolioStyles";
 
 const NEW_PORTFOLIO_MUTATION = gql`

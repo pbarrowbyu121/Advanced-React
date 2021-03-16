@@ -1,14 +1,18 @@
 import { getPortfolioPerformance } from "../lib/getPortfolioPerformance";
+// import PortfolioChart from "./PortfolioChartOld";
 import PortfolioChart from "./PortfolioChart";
 import { TSLA_response, AMZN_response } from "../lib/dummyData";
+import ChartStyles from "./styles/ChartStyles";
+import Chart from "./Chart";
 
 export default function PortfolioPerformance({ portfolioPerformance }) {
   if (!portfolioPerformance === 0) return <p>No orders</p>;
 
   //   let portfolioPerformance = getPortfolioPerformance(portfolio).performance;
   return (
-    <div>
+    <ChartStyles>
       <PortfolioChart data={portfolioPerformance} />
-    </div>
+      {/* <Chart data={portfolioPerformance} /> */}
+    </ChartStyles>
   );
 }

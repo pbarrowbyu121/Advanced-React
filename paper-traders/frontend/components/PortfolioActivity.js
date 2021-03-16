@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
 import NewOrderStyles from "./styles/NewOrderStyles";
+import PortfolioStyles from "./styles/PortfolioStyles";
 
 export default function PortfolioActivity({ portfolioId, portfolio }) {
   if (!portfolio || portfolio.orders.length === 0) {
@@ -18,7 +19,7 @@ export default function PortfolioActivity({ portfolioId, portfolio }) {
   // console.log("orders here", portfolio.orders.length);
   let sortedActivity = sortOrders(portfolio, "desc");
   return (
-    <div>
+    <PortfolioStyles>
       <TableTitle>Portfolio: {portfolio.name}</TableTitle>
       <TableStyles>
         <thead>
@@ -38,6 +39,6 @@ export default function PortfolioActivity({ portfolioId, portfolio }) {
           ))}
         </tbody>
       </TableStyles>
-    </div>
+    </PortfolioStyles>
   );
 }

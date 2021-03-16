@@ -2,10 +2,11 @@ import styled from "styled-components";
 
 const NavStyles = styled.ul`
   margin: 0;
-  padding: 0;
+  padding-right: 3rem;
   display: flex;
   justify-self: end;
   font-size: 2rem;
+  background-color: var(--gray);
   a,
   button {
     padding: 1rem 3rem;
@@ -22,7 +23,7 @@ const NavStyles = styled.ul`
       font-size: 10px;
       padding: 0 10px;
     }
-    &:before {
+    /* &:before {
       content: "";
       width: 2px;
       background: var(--lightGray);
@@ -32,7 +33,7 @@ const NavStyles = styled.ul`
       transform: skew(-20deg);
       top: 0;
       bottom: 0;
-    }
+    } */
     &:after {
       height: 2px;
       background: green;

@@ -1,23 +1,12 @@
-import { QueryDocumentKeys } from "graphql/language/visitor";
-import Order from "./Order";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
 import PortfolioActivity from "./PortfolioActivity";
 import PortfolioPerformance from "./PortfolioPerformance";
-import PortfolioStyles from "./styles/PortfolioStyles";
-import { getPortfolioPerformance } from "../lib/getPortfolioPerformance";
 import { useState, useEffect, useContext } from "react";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import NewOrderStyles from "./styles/NewOrderStyles";
 import NewOrder from "./NewOrder";
-import NewOrderButtonStyles from "./styles/NewOrderButtonStyles";
 import NewOrderButton from "./NewOrderButton";
 import AddCash from "./AddCash";
-import { TSLA_response, AMZN_response, AAPL_response } from "../lib/dummyData";
 import { UserContext } from "../contexts/UserContext";
-import PortfolioPerformanceStyles from "./styles/PortfolioPerformanceStyles";
-// import NewOrderStyles1 from "./styles/NewOrderStyles";
+import ChartTimeFilter from "./ChartTimeFilter";
+import PortfolioChart from "./PortfolioChart";
 
 const AddCircleIconStyle = {
   color: "var(--green)",
@@ -34,62 +23,56 @@ const timeLineValues = {
   year: 252,
 };
 
-// const SINGLE_PORTFOLIO_QUERY = gql`
-//   query SINGLE_PORTFOLIO_QUERY($id: ID!) {
-//     Portfolio(where: { id: $id }) {
-//       #   id
-//       name
-//       user {
-//         name
-//       }
-//       orders {
-//         id
-//         action
-//         ticker
-//         price
-//         shares
-//         date
-//       }
-//     }
-//   }
-// `;
-
 export default function Portfolio({ id }) {
   const userState = useContext(UserContext);
 
   if (!userState) return null;
 
-  const [state, setOrderToggle] = useState({
-    newOrder: false,
-    cashOrder: false,
-  });
-
-  const [timeLineState, setTimeLineState] = useState(21);
-
-  // filter userState for the portfolio for this page
+  // initial portfolio performance chart data is set to a month
   let portfolio = userState.portfolios.filter(
     (portfolio) => portfolio.id === id
   )[0];
-  // console.log("portfolio page", portfolio);
 
-  // console.log("portfolio performance length", portfolio.performance.length);
+  // console.log("portfolio", portfolio);
 
-  // determine how many items to include in chart based on radio buttons
-  let sliceAmount =
-    timeLineState === "ALL"
-      ? portfolio.performance.length
-      : Math.min(timeLineState, portfolio.performance.length);
-  // console.log("sliceAmount", sliceAmount);
+  // states for toggling order forms for stock and cash
+  const [newOrderToggleState, setNewOrderToggleState] = useState(false);
+  const [addCashToggleState, setAddCashToggleState] = useState(false);
 
-  // filter portfolio data for days only included in this portfolio
-  let portfolioSpecificPerformance = portfolio.performance.filter(
+  // set filter for chart function, default to monthly
+  const [timeLineState, setTimeLineState] = useState(timeLineValues.month);
+
+  let performanceForChart;
+
+  //   // filter userState for the portfolio for this page and for days only included in this portfolio
+  performanceForChart = portfolio.performance.filter(
     (day) => day.date >= portfolio.summary.startDate
   );
 
-  // filter performance data for last n items, n is the number from radio button filter
-  let performanceForChart = portfolioSpecificPerformance.slice(
-    Math.max(portfolio.performance.length - sliceAmount, 0)
-  );
+  // state for portfolio data for chart
+  const [portfolioData, setPortfolioData] = useState([]);
+
+  useEffect(() => {
+    // console.log("timeLineState", timeLineState);
+    // console.log("performanceforChart length", performanceForChart.length);
+    // determine how many items to include in chart based on radio buttons
+    let sliceAmount =
+      timeLineState === "ALL"
+        ? performanceForChart.length
+        : Math.min(parseInt(timeLineState), performanceForChart.length);
+
+    // console.log("sliceAmount", sliceAmount);
+    setPortfolioData(
+      performanceForChart.slice(
+        Math.max(performanceForChart.length - sliceAmount, 0)
+      )
+    );
+  }, [timeLineState]);
+
+  function handleChartFilterChange(e) {
+    let { name, value, type } = e.target;
+    setTimeLineState(e.target.value);
+  }
 
   // console.log("performance for Chart", performanceForChart);
 
@@ -97,118 +80,61 @@ export default function Portfolio({ id }) {
   // if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
+    <div id="portfolio">
       {/* Shows list of orders in portfolio*/}
-      <PortfolioStyles>
-        {portfolio && (
-          <PortfolioActivity portfolioId={id} portfolio={portfolio} />
-        )}
-      </PortfolioStyles>
+      {portfolio && (
+        <PortfolioActivity portfolioId={id} portfolio={portfolio} />
+      )}
 
       {/* New Order Button */}
-      <NewOrderButtonStyles>
-        <AddCircleIcon style={AddCircleIconStyle}>AddCircleIcon</AddCircleIcon>
-        <a
-          onClick={() => {
-            setOrderToggle({ newOrder: !state.newOrder, cashOrder: false });
-          }}
-        >
-          New Order
-        </a>
-      </NewOrderButtonStyles>
+      <NewOrderButton
+        handler={() => {
+          setNewOrderToggleState(true);
+        }}
+        text="New Order"
+      />
 
       {/* Add Cash Button */}
-      <NewOrderButtonStyles>
-        <AddCircleIcon
-          style={AddCircleIconStyle}
-          onClick={() => {
-            setOrderToggle({ newOrder: false, cashOrder: !state.cashOrder });
-          }}
-        >
-          AddCircleIcon
-        </AddCircleIcon>
-        <a
-          onClick={() => {
-            setOrderToggle({ newOrder: false, cashOrder: !state.cashOrder });
-          }}
-        >
-          Add Cash
-        </a>
-      </NewOrderButtonStyles>
+      <NewOrderButton
+        handler={() => {
+          setAddCashToggleState(true);
+        }}
+        text="Add Cash"
+      />
 
       {/* Add Order form, should appear from side */}
-      {id && state.newOrder && (
-        <NewOrderStyles>
-          <a
-            onClick={() => {
-              setOrderToggle({ newOrder: false, cashOrder: false });
-            }}
-          >
-            Close
-          </a>
-          <NewOrder
-            portfolioId={id}
-            portfolioPerformance={portfolio.performance}
-          />
-        </NewOrderStyles>
+      {id && newOrderToggleState && (
+        <NewOrder
+          portfolioId={id}
+          portfolioPerformance={portfolio.performance}
+          handler={() => {
+            setNewOrderToggleState(false);
+          }}
+        />
       )}
 
       {/* Add Cash form, should appear from side */}
-      {id && state.cashOrder && (
-        <NewOrderStyles>
-          <a
-            onClick={() =>
-              setOrderToggle({ newOrder: false, cashOrder: false })
-            }
-          >
-            Close
-          </a>
-          <AddCash portfolioId={id} />
-        </NewOrderStyles>
+      {id && addCashToggleState && (
+        <AddCash
+          portfolioId={id}
+          handler={() => {
+            setAddCashToggleState(false);
+          }}
+        />
       )}
 
-      {/* Filter for Chart */}
-      <div>
-        <label>1w</label>
-        <input
-          type="radio"
-          name="timeLine"
-          value={timeLineValues.week}
-          onChange={() => setTimeLineState(timeLineValues.week)}
-          // checked="checked"
-        />
-        <label>1m</label>
-        <input
-          type="radio"
-          name="timeLine"
-          value={timeLineValues.month}
-          onChange={() => setTimeLineState(timeLineValues.month)}
-          checked={timeLineState === timeLineValues.month ? "checked" : null}
-        />
-        <label>1y</label>
-        <input
-          type="radio"
-          name="timeLine"
-          value={timeLineValues.year}
-          onChange={() => setTimeLineState(timeLineValues.year)}
-          checked={timeLineState === timeLineValues.year ? "checked" : null}
-        />
-        <label>ALL</label>
-        <input
-          type="radio"
-          name="timeLine"
-          value={500}
-          onChange={() => setTimeLineState("ALL")}
-          checked={timeLineState === "ALL" ? "checked" : null}
-        />
-      </div>
-      <div>Timeline: {timeLineState}</div>
+      <ChartTimeFilter
+        handler={handleChartFilterChange}
+        checkedValue={timeLineState}
+      />
 
       {/* Chart to show the portfolio performance */}
       {portfolio && (
-        <PortfolioPerformanceStyles>
-          <PortfolioPerformance portfolioPerformance={performanceForChart} />
-        </PortfolioPerformanceStyles>
+        <div>
+          <PortfolioPerformance portfolioPerformance={portfolioData} />
+        </div>
+
+        // <Chart1 data={portfolioData} />
       )}
     </div>
   );

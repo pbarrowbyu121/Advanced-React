@@ -15,7 +15,7 @@ export default function SignOut({ children }) {
 
   return (
     <button type="button" onClick={signout}>
-      Sign Out
+      $ign Out
     </button>
   );
 }

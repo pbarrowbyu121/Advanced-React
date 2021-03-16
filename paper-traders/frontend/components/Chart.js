@@ -78,7 +78,9 @@ class Chart extends React.Component {
       .append("g")
       .attr("id", "y-axis")
       .attr("transform", "translate(" + padding + ", 0)")
-      .call(yAxis);
+      .call(yAxis)
+      .selectAll("text")
+      .attr("font-family", "Permanent Marker");
   }
 
   componentDidUpdate() {

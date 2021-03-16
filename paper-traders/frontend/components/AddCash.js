@@ -8,6 +8,7 @@ import gql from "graphql-tag";
 import { useMutation, useQuery } from "@apollo/client";
 import { CURRENT_USER_QUERY, useUser } from "./User";
 import Form from "./styles/Form";
+import NewOrderStyles from "./styles/NewOrderStyles";
 
 const ADD_CASH_MUTATION = gql`
   mutation ADD_CASH_MUTATION(
@@ -43,7 +44,7 @@ function update(cache, payload) {
   cache.evict(cache.identify(payload.data.createOrder));
 }
 
-export default function AddCash({ portfolioId }) {
+export default function AddCash({ portfolioId, handler }) {
   const user = useUser();
   if (!user) return null;
   // console.log("user", user);
@@ -69,7 +70,8 @@ export default function AddCash({ portfolioId }) {
   );
 
   return (
-    <div>
+    <NewOrderStyles>
+      <a onClick={handler}>Close</a>
       <Form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -115,6 +117,6 @@ export default function AddCash({ portfolioId }) {
           </a>
         </fieldset>
       </Form>
-    </div>
+    </NewOrderStyles>
   );
 }

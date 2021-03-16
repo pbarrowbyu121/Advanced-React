@@ -9,18 +9,21 @@ import { useUser } from "./User";
 import { UserContext, UserProvider } from "../contexts/UserContext";
 import { TSLA_response, AMZN_response, AAPL_response } from "../lib/dummyData";
 import { portfolioSummary } from "../lib/portfolioFunctions";
-import getStockData from "../lib/getStockData";
+import getStockData from "../lib/getStockURLs";
 
 // const stockAPIData = [TSLA_response, AMZN_response, AAPL_response];
 
 const GlobalStyles = createGlobalStyle`
  html {
-    --red: #c74b55;
+   --yellow: #FCF3A7;
+   --red: #E3BD7D;
+   --blue: #D2D99D;
+    /* --red: #c74b55; */
     --black: #393939;
-    --grey: #3A3A3A;
-    --green: #55c74b;
+    --grey: #a4a4a4;
+    --green: #5A9D31;
     --gray: var(--grey);
-    --lightGrey: #e1e1e1;
+    --lightGrey: #b6b6b6;
     --lightGray: var(--lightGrey);
     --offWhite: #ededed;
     --maxWidth: 1000px;

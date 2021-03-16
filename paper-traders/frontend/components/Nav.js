@@ -6,21 +6,20 @@ import NavStyles from "./styles/NavStyles";
 
 export default function Nav() {
   const user = useUser();
-  // console.log(user);
   return (
     <NavStyles>
       {/* this stuff shows if user is logged in */}
       {user && (
         <>
-          <Link href="/stocksearch">Stock Search</Link>
-          {/* <Link href="/neworder">New Order</Link> */}
-          <Link href="/portfolios">Portfolios</Link>
+          <Link href="/stocksearch">$tock $earch</Link>
+          <Link href="/watchlist">Watchli$t</Link>
+          <Link href="/portfolios">Portfolio$</Link>
           <SignOut />
         </>
       )}
       {!user && (
         <>
-          <Link href="/signin">Sign In</Link>
+          <Link href="/signin">$ign In</Link>
         </>
       )}
     </NavStyles>

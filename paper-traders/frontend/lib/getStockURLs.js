@@ -39,11 +39,4 @@ export default function getStockData(userPortfolios) {
   console.log("urlArr", urlArr);
 
   return urlArr;
-
-  // // returns each fetched data
-  // Promise.all(urlArr.map((url) => fetch(url).catch((err) => console.log(err))))
-  //   .then((responses) => Promise.all(responses.map((res) => res.json())))
-  //   .then((response) => setStockDataState(response));
-
-  // return returnedStockData;
 }
