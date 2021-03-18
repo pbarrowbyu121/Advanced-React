@@ -33,7 +33,7 @@ class Chart extends React.Component {
       .range([h - padding, padding]);
 
     const svg = d3
-      .select("div")
+      .select("#appendChart")
       .append("svg")
       .attr("width", w)
       .attr("height", h);
@@ -67,6 +67,7 @@ class Chart extends React.Component {
       .attr("transform", "translate(0," + (h - padding) + ")")
       .call(xAxis)
       .selectAll("text")
+      .attr("font-family", "Permanent Marker")
       .attr("dx", "-3.5em")
       .attr("dy", "-.1em")
       .attr("transform", "rotate(-65)");

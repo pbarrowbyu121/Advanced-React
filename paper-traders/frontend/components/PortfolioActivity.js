@@ -24,6 +24,7 @@ export default function PortfolioActivity({ portfolioId, portfolio }) {
       <TableStyles>
         <thead>
           <tr>
+            <th></th>
             <th>Stock</th>
             <th>Action</th>
             <th>Shares</th>

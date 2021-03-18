@@ -24,6 +24,7 @@ const GlobalStyles = createGlobalStyle`
     --green: #5A9D31;
     --gray: var(--grey);
     --lightGrey: #b6b6b6;
+    --pencil: #383428;
     --lightGray: var(--lightGrey);
     --offWhite: #ededed;
     --maxWidth: 1000px;
@@ -36,6 +37,8 @@ const GlobalStyles = createGlobalStyle`
   }
   body {
     font-family: 'Permanent Marker', sans-serif;
+    /* font-family: 'Caveat', sans-serif; */
+    font-weight: lighter;
     padding: 0;
     margin: 0;
     font-size: 1.5rem;
@@ -51,6 +54,7 @@ const GlobalStyles = createGlobalStyle`
   button {
     font-family: 'Permanent Marker', sans-serif;
   }
+
   `;
 
 function Page({ children }) {

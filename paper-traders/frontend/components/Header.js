@@ -11,6 +11,7 @@ const Logo = styled.h1`
   border-radius: 20px;
   background: var(--green);
   font-family: "Permanent Marker";
+  font-weight: normal;
   a {
     color: white;
     text-decoration: none;

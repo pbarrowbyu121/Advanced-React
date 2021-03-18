@@ -25,6 +25,7 @@ function PortfolioListItem({ portfolio }) {
 
   return (
     <tr>
+      <td></td>
       <td>
         <Link href={`/portfolio/${portfolio.id}`}>{portfolio.name}</Link>
       </td>

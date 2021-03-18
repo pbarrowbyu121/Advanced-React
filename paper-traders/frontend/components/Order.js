@@ -10,6 +10,7 @@ import Link from "next/link";
 function Order({ order }) {
   return (
     <tr key={order.id}>
+      <td></td>
       <td>{order.ticker}</td>
       <td>{order.action}</td>
       <td>{order.shares.toLocaleString()}</td>

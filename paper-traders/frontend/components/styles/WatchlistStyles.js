@@ -21,7 +21,7 @@ const WatchlistStyles = styled.div`
     box-shadow: 3px 3px 0 #222;
     text-align: center;
     margin-left: 1rem;
-    margin-right: 2rem;
+    margin-right: 5rem;
   }
 
   .page_head {

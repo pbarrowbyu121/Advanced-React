@@ -16,10 +16,12 @@ function PortfolioList() {
     userState !== undefined && (
       <div>
         <PortfolioStyles>
+          <div class="notebook-top"></div>
           <TableTitle>Portfolios for {userState.name}</TableTitle>
           <TableStyles>
             <thead>
               <tr>
+                <th></th>
                 <th>Name</th>
                 <th>Start Date</th>
                 <th>Invested</th>

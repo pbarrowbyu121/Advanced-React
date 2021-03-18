@@ -5,9 +5,14 @@ import Chart from "./Chart";
 import ChartTimeFilter from "./ChartTimeFilter";
 import SearchParam from "./SearchParam";
 import Form from "./styles/Form";
+import gql from "graphql-tag";
+import useForm from "../lib/useForm";
 import { useState, useEffect, useContext } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import NewWatchListItem from "./NewWatchlistItem";
 import { createFetchURL } from "../lib/portfolioFunctions";
+import { CURRENT_USER_QUERY, useUser } from "./User";
+import StockSearchStyle from "./styles/StockSearchStyle";
 
 // const API_key = process.env.API_KEY;
 const API_key = "O1F92HXG7p_OFdN7G7RZsaTZd_Or7pEi";
@@ -19,12 +24,45 @@ const timeLineValues = {
   year: 252,
 };
 
+const NEW_WATCHLIST_MUTATION = gql`
+  mutation NEW_WATCHLIST_MUTATION($symbol: String!, $userId: ID!) {
+    createWatchlist(
+      data: { symbol: $symbol, user: { connect: { id: $userId } } }
+    ) {
+      id
+    }
+  }
+`;
+
+// optimistic promise to update the cache
+function update(cache, payload) {
+  cache.evict(cache.identify(payload.data.createWatchlist));
+}
+
 export default function StockSearch() {
+  const user = useUser();
+  if (!user) return null;
   const [tickerState, setTickerState] = useState("");
   const [stockData, setStockData] = useState(null);
 
   // set filter for chart function
   const [timeLineState, setTimeLineState] = useState(21);
+
+  const { inputs, clearForm } = useForm({
+    symbol: tickerState,
+    userId: user.id,
+  });
+
+  const [createWatchlist, { loading, error, data }] = useMutation(
+    NEW_WATCHLIST_MUTATION,
+    {
+      variables: inputs,
+      update,
+
+      // refetch the currently logged in user
+      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+    }
+  );
 
   let dayNum;
   let monthNum;
@@ -68,18 +106,6 @@ export default function StockSearch() {
 
     let url = createFetchURL(tickerState, beg_date, end_date);
 
-    // let url =
-    //   "https://api.polygon.io/v2/aggs/ticker/" +
-    //   tickerState +
-    //   "/range/1/day/" +
-    //   beg_date +
-    //   "/" +
-    //   end_date +
-    //   "?apiKey=" +
-    //   API_key;
-
-    // console.log(url);
-
     // fetch the api data
     fetch(url)
       .then((res) => res.json())
@@ -88,25 +114,98 @@ export default function StockSearch() {
       });
   }
 
+  function extraRows() {
+    // console.log("extraRows", [...Array(num).keys()]);
+    console.log("extra rows called");
+    [...Array(5).keys()].map((index) => (
+      <div class="page-row" key={index}>
+        <div class="page-margin"></div>
+        <div class="righthand-side">extra row</div>
+      </div>
+    ));
+  }
+
   return (
     <div>
-      {/* <Form> */}
-      <h1>Stock Search</h1>
-      <SearchParam
-        fieldName="Symbol"
-        name="ticker"
-        placeholder="XXXX"
-        onChange={(e) => setTickerState(e.target.value)}
-      />
-      <button onClick={handleGetData}>See Stock Performance</button>
-      <ChartTimeFilter
-        handler={handleChartFilterChange}
-        checkedValue={timeLineState}
-      />
-      <NewWatchListItem />
-      {stockData && <Chart data={stockDataForChart} />}
+      <StockSearchStyle id="stocksearch">
+        <div class="notebook-top"></div>
+        <div class="page-head">
+          <div class="page-margin"></div>
+          <h1>Stock Search</h1>
+        </div>
+        <div class="page-row search-param">
+          <div class="page-margin"></div>
+          <label htmlFor="ticker">
+            Symbol
+            <input
+              id="ticker"
+              name="ticker"
+              placeholder="XXXX"
+              onChange={(e) => setTickerState(e.target.value)}
+            ></input>
+          </label>
+        </div>
+        <div class="page-row">
+          <div class="page-margin"></div>
+          <div class="righthand-side">
+            <button onClick={handleGetData}>See Stock Performance</button>
+            <button
+              onClick={async (e) => {
+                e.preventDefault();
+                const res = await createWatchlist();
+                clearForm();
+                inputs.userId = user.id;
+              }}
+            >
+              Add to Watchlist
+            </button>
+          </div>
+        </div>
 
-      {/* </Form> */}
+        {stockDataForChart && (
+          <div class="page-row">
+            <div class="page-margin"></div>
+            <div class="righthand-side">
+              <div id="appendChart"></div>
+            </div>
+          </div>
+        )}
+        {stockDataForChart && (
+          <div class="page-row">
+            <div class="page-margin"></div>
+            <div class="righthand-side chart-title">
+              {tickerState} Performance, {timeLineState}
+            </div>
+          </div>
+        )}
+        {/* blank rows */}
+        {[...Array(13).keys()].map((index) => (
+          <div class="page-row" key={index}>
+            <div class="page-margin"></div>
+            <div class="righthand-side"></div>
+          </div>
+        ))}
+        {stockDataForChart && (
+          <div class="page-row">
+            <div class="page-margin"></div>
+            <div class="righthand-side chart-filter-row">
+              <ChartTimeFilter
+                handler={handleChartFilterChange}
+                checkedValue={timeLineState}
+              />
+            </div>
+          </div>
+        )}
+        {[...Array(2).keys()].map((index) => (
+          <div class="page-row" key={index}>
+            <div class="page-margin"></div>
+            <div class="righthand-side"></div>
+          </div>
+        ))}
+      </StockSearchStyle>
+
+      {/* <NewWatchListItem /> */}
+      {stockData && <Chart data={stockDataForChart} />}
     </div>
   );
 }

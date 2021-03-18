@@ -43,14 +43,14 @@ export const UserProvider = (props) => {
       const urlArr = getStockURLs(user.portfolios);
 
       // returns each fetched data
-      Promise.all(
-        urlArr.map((url) => fetch(url).catch((err) => console.log(err)))
-      )
-        .then((responses) => Promise.all(responses.map((res) => res.json())))
-        .then((response) => {
-          setUserState(copyUser(user, response));
-        });
-      // setUserState(copyUser(user, stockAPIData));
+      // Promise.all(
+      //   urlArr.map((url) => fetch(url).catch((err) => console.log(err)))
+      // )
+      //   .then((responses) => Promise.all(responses.map((res) => res.json())))
+      //   .then((response) => {
+      //     setUserState(copyUser(user, response));
+      //   });
+      setUserState(copyUser(user, stockAPIData));
       console.log("fetching data");
     }
   }, [user]);

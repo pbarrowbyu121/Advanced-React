@@ -53,8 +53,6 @@ export default function Portfolio({ id }) {
   const [portfolioData, setPortfolioData] = useState([]);
 
   useEffect(() => {
-    // console.log("timeLineState", timeLineState);
-    // console.log("performanceforChart length", performanceForChart.length);
     // determine how many items to include in chart based on radio buttons
     let sliceAmount =
       timeLineState === "ALL"
@@ -74,13 +72,12 @@ export default function Portfolio({ id }) {
     setTimeLineState(e.target.value);
   }
 
-  // console.log("performance for Chart", performanceForChart);
-
   // if (loading) return <p>Loading...</p>;
   // if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div id="portfolio">
+      <div class="notebook-top"></div>
       {/* Shows list of orders in portfolio*/}
       {portfolio && (
         <PortfolioActivity portfolioId={id} portfolio={portfolio} />
